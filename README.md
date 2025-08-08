@@ -34,6 +34,7 @@ Framer Motion: A library for adding animations and gestures to React components.
 How to Run the Project Locally 🚀
 Follow these steps to set up and run the project on your local machine.
 
+
 Prerequisites
 Make sure you have Node.js and a package manager (npm or yarn) installed.
 
@@ -76,3 +77,4 @@ Add Functionality: Implement interactive features like audio players for the lis
 Introduce State Management: Integrate a state management library like Redux or Zustand for more complex features.
 
 Enhance UI/UX: Explore adding more animations, transitions, and accessibility features.
+## *Built with ❤️ for achivers by Ahmad.*
