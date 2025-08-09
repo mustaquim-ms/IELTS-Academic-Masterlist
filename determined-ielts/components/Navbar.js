@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
-// Styled components for the new navbar
+// Styled Components for the Navbar
 const Nav = styled(motion.nav)`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
+  height: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: ${props => props.scrolled ? 'var(--navbar-scrolled-bg)' : 'transparent'};
-  box-shadow: ${props => props.scrolled ? 'var(--shadow-light)' : 'none'};
-  backdrop-filter: ${props => props.scrolled ? 'blur(10px)' : 'none'};
-  transition: all 0.3s ease;
-
-  @media (max-width: 768px) {
-    justify-content: space-between;
-    padding: 1rem;
-  }
+  padding: 0 2rem;
+  z-index: 1000;
+  background-color: ${(props) => (props.isScrolled ? 'rgba(255, 255, 255, 0.95)' : 'transparent')};
+  backdrop-filter: ${(props) => (props.isScrolled ? 'blur(10px)' : 'none')};
+  box-shadow: ${(props) => (props.isScrolled ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none')};
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
 `;
 
-const NavContainer = styled.div`
+const NavContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,135 +29,137 @@ const NavContainer = styled.div`
   max-width: 1200px;
 `;
 
-const Logo = styled(motion.a)`
+const Logo = styled(Link)`
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--primary-color);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const NavLinks = styled(motion.ul)`
-  list-style: none;
+const NavLinks = styled.div`
   display: flex;
+  align-items: center;
   gap: 2rem;
-  margin: 0;
-  padding: 0;
 
   @media (max-width: 768px) {
-    display: ${props => (props.open ? 'flex' : 'none')};
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: var(--navbar-scrolled-bg);
-    box-shadow: var(--shadow-light);
-    padding: 1rem 2rem;
+    display: none; // Hide on mobile
   }
 `;
 
-const NavItem = styled(motion.li)`
-  font-weight: 500;
-  font-size: 1rem;
-`;
-
-const NavLink = styled.a`
-  position: relative;
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--secondary-color);
-    transition: width 0.3s ease;
-  }
-  &:hover::after {
-    width: 100%;
-  }
-`;
-
-const Hamburger = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
+const NavLink = styled(Link)`
   color: var(--text-color);
-
-  @media (max-width: 768px) {
-    display: block;
-    z-index: 1010;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--primary-color);
   }
 `;
 
-// Animation variants
-const navVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
+const SocialIcons = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const SocialIcon = styled.a`
+  font-size: 1.5rem;
+  color: var(--text-color-secondary);
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: var(--primary-color);
+  }
+`;
+
+const AuthButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const AuthButton = styled(Link)`
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+
+  &.login {
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    background-color: transparent;
+    &:hover {
+      background-color: var(--primary-color-light);
+    }
+  }
+
+  &.signup {
+    color: #ffffff;
+    background-color: var(--primary-color);
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+`;
+
+const socialIcons = [
+  { name: 'Facebook', href: '#', icon: 'F' }, // Placeholder icons
+  { name: 'Twitter', href: '#', icon: 'T' },
+  { name: 'Instagram', href: '#', icon: 'I' },
+];
 
 export default function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const [isMounted, setIsMounted] = useState(false); // New state to track if component is mounted
+  const [isScrolled, setIsScrolled] = useState(false);
 
-    // Effect to handle scroll and mounting
-    useEffect(() => {
-        // Set mounted state to true once component has hydrated on the client
-        setIsMounted(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
 
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 50;
-            setScrolled(isScrolled);
-        };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
-        // Add scroll listener only after component is mounted
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    const toggleMenu = () => setIsOpen(!isOpen);
-
-    return (
-        <Nav scrolled={isMounted ? scrolled : false} variants={navVariants} initial="hidden" animate="visible">
-            <NavContainer>
-                {/* Added legacyBehavior to prevent nested <a> tags */}
-                <Link href="/" passHref legacyBehavior>
-                    <Logo>Determined IELTS</Logo>
-                </Link>
-                <Hamburger onClick={toggleMenu}>
-                    {isOpen ? '✕' : '☰'}
-                </Hamburger>
-                <NavLinks open={isOpen}>
-                    <NavItem>
-                        {/* Added legacyBehavior to prevent nested <a> tags */}
-                        <Link href="/reading" passHref legacyBehavior>
-                            <NavLink>Reading</NavLink>
-                        </Link>
-                    </NavItem>
-                    <NavItem>
-                        {/* Added legacyBehavior to prevent nested <a> tags */}
-                        <Link href="/writing" passHref legacyBehavior>
-                            <NavLink>Writing</NavLink>
-                        </Link>
-                    </NavItem>
-                    <NavItem>
-                        {/* Added legacyBehavior to prevent nested <a> tags */}
-                        <Link href="/listening" passHref legacyBehavior>
-                            <NavLink>Listening</NavLink>
-                        </Link>
-                    </NavItem>
-                    <NavItem>
-                        {/* Added legacyBehavior to prevent nested <a> tags */}
-                        <Link href="/speaking" passHref legacyBehavior>
-                            <NavLink>Speaking</NavLink>
-                        </Link>
-                    </NavItem>
-                </NavLinks>
-            </NavContainer>
-        </Nav>
-    );
+  return (
+    <Nav isScrolled={isScrolled}>
+      <NavContent>
+        <Logo href="/">Determined IELTS</Logo>
+        <NavLinks>
+          <NavLink href="/listening">Listening</NavLink>
+          <NavLink href="/reading">Reading</NavLink>
+          <NavLink href="/writing">Writing</NavLink>
+          <NavLink href="/speaking">Speaking</NavLink>
+        </NavLinks>
+        <motion.div>
+          {isScrolled && (
+            <SocialIcons
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {socialIcons.map((social) => (
+                <SocialIcon key={social.name} href={social.href}>
+                  {social.icon}
+                </SocialIcon>
+              ))}
+            </SocialIcons>
+          )}
+          {!isScrolled && (
+            <AuthButtons>
+              <AuthButton href="/login" className="login">Log In</AuthButton>
+              <AuthButton href="/signup" className="signup">Sign Up</AuthButton>
+            </AuthButtons>
+          )}
+        </motion.div>
+      </NavContent>
+    </Nav>
+  );
 }
