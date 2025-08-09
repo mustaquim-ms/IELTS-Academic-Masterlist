@@ -377,7 +377,7 @@ const ActionButton = styled(motion(Link))`
   
   &:hover {
     transform: translateY(-3px);
-    background-color: var(--text-color);
+    background-color: var(--primary-color-dark); /* Color change on hover */
   }
 `;
 
@@ -503,6 +503,8 @@ const CTAButton = styled(motion(Link))`
 
   &:hover {
     transform: scale(1.05);
+    background-color: var(--background-color-light); /* Color change on hover */
+    color: var(--primary-color); /* Text color change on hover */
   }
 `;
 
