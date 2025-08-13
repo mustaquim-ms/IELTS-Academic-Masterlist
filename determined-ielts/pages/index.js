@@ -634,7 +634,7 @@ const Navbar = () => {
         />
       </NavLogo>
       <NavLinks>
-        <NavLink href="/">Home</NavLink>
+        <NavLink href="./index.js">Home</NavLink>
         <DropdownContainer ref={ref}>
           <NavLink href="#" as="span">
             AI Tools
@@ -681,7 +681,8 @@ const Navbar = () => {
             )}
           </AnimatePresence>
         </DropdownContainer>
-        <NavLink href="/about">About Us</NavLink>
+        <NavLink href="./blog">Blogs</NavLink>
+        <NavLink href="/about_us">About Us</NavLink>
         <NavLink href="/contact">Contact</NavLink>
       </NavLinks>
 
