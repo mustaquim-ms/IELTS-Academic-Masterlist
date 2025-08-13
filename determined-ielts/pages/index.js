@@ -282,7 +282,7 @@ const HeroSection = styled(motion.section)`
   align-items: center;
   gap: 2rem;
   padding: 6rem 2rem;
-  max-width: 1400px;
+  max-width: 1800px;
   margin: 2rem auto 0;
   width: 100%;
   background: var(--primary-color);
@@ -579,6 +579,7 @@ const TestimonialAuthor = styled.p`
 // Helper components for the Navbar and Footer
 const Navbar = () => {
   const [ref, isHovering] = useHover();
+  const [ieltsModulesRef, isIeltsModulesHovering] = useHover();
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = () => {
@@ -606,6 +607,13 @@ const Navbar = () => {
     { name: 'Smart Study Planner', path: '/ai-tools/study-planner' },
     { name: 'IELTS Preparation', path: '/ai-tools/ielts-prep' },
     { name: 'AI Image Generator', path: '/ai-tools/image-gen' },
+  ];
+
+  const ieltsModules = [
+    { name: 'Listening', path: '/listening' },
+    { name: 'Speaking', path: '/speaking' },
+    { name: 'Reading', path: '/reading' },
+    { name: 'Writing', path: '/writing' },
   ];
 
   const socialLinks = [
@@ -650,7 +658,29 @@ const Navbar = () => {
             )}
           </AnimatePresence>
         </DropdownContainer>
-        <NavLink href="/modules">Modules</NavLink>
+        <DropdownContainer ref={ieltsModulesRef}>
+          <NavLink href="#" as="span">
+            IELTS Modules
+            <ChevronDown style={{ verticalAlign: 'middle', marginLeft: '8px' }} />
+          </NavLink>
+          <AnimatePresence>
+            {isIeltsModulesHovering && (
+              <DropdownMenu
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={dropdownVariants}
+                style={{ originY: 0 }}
+              >
+                {ieltsModules.map((tool, index) => (
+                  <DropdownItem key={index} href={tool.path}>
+                    {tool.name}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            )}
+          </AnimatePresence>
+        </DropdownContainer>
         <NavLink href="/about">About Us</NavLink>
         <NavLink href="/contact">Contact</NavLink>
       </NavLinks>
@@ -812,11 +842,11 @@ const Footer = () => {
           </FooterSocials>
         </FooterSection>
         <FooterSection>
-          <FooterTitle>Modules</FooterTitle>
-          <FooterLink href="/listening">Listening</FooterLink>
-          <FooterLink href="/reading">Reading</FooterLink>
-          <FooterLink href="/writing">Writing</FooterLink>
-          <FooterLink href="/speaking">Speaking</FooterLink>
+          <FooterTitle>IELTS Modules</FooterTitle>
+          <FooterLink href="./listening.js">Listening</FooterLink>
+          <FooterLink href="./reading.js">Reading</FooterLink>
+          <FooterLink href="./writing.js">Writing</FooterLink>
+          <FooterLink href="./speaking.js">Speaking</FooterLink>
         </FooterSection>
         <FooterSection>
           <FooterTitle>Help & Support</FooterTitle>
@@ -947,10 +977,32 @@ const App = () => {
   const [wordIndex, setWordIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const words = ['Limitless Efforts.', 'Brilliance.', 'Creativity.', 'Exceptional Ideas.', 'Excellence.', 'Determination.  &', 'Passion.'];
+  const words = ['Limitless Efforts.', 'Brilliance.', 'Creativity.', 'Exceptional Ideas.', 'Excellence.', 'Determination. &', 'Passion.'];
   const typingSpeed = 150;
   const deletingSpeed = 80;
   const delayBetweenWords = 1500;
+
+
+  // This is a simplified example of the logic you need.
+  const Typewriter = ({ text }) => {
+    const [typedText, setTypedText] = useState("");
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+      // Only run if there is more text to type
+      if (index < text.length) {
+        const timeoutId = setTimeout(() => {
+          setTypedText(typedText + text.charAt(index));
+          setIndex(index + 1);
+        }, 100); // Adjust speed here
+
+        return () => clearTimeout(timeoutId); // Clean up the timer
+      }
+    }, [index, text, typedText]);
+
+    return <TypewriterSpan>{typedText}</TypewriterSpan>;
+  };
+
 
   useEffect(() => {
     const handleTyping = () => {
@@ -1084,66 +1136,85 @@ const App = () => {
             width="500"
             height="500"
             viewBox="0 0 500 500"
-            style={{ top: '10%', left: '5%' }}
-            initial={{ rotate: 0, scale: 0 }}
-            animate={{ rotate: 360, scale: 1 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ top: '-10%', left: '-10%' }}
+            initial={{ rotate: 0, scale: 0.8 }}
+            animate={{ rotate: 360, scale: 1.2 }}
+            transition={{
+              repeat: Infinity,
+              duration: 20,
+              ease: 'linear',
+              repeatType: 'reverse'
+            }}
           >
-            <path d="M480 200.5C480 348.5 351.5 480 200.5 480S21 351.5 21 200.5 149.5 21 299.5 21 480 52.5 480 200.5Z" fill="#FEFFFF" />
+            <circle cx="250" cy="250" r="200" fill="#DEF2F1" />
           </HeroAbstractShape>
-
           <HeroAbstractShape
             width="400"
             height="400"
             viewBox="0 0 400 400"
-            style={{ bottom: '10%', right: '5%' }}
-            initial={{ rotate: 360, scale: 0 }}
-            animate={{ rotate: 0, scale: 1 }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ bottom: '-10%', right: '-10%' }}
+            initial={{ rotate: 0, scale: 0.8 }}
+            animate={{ rotate: -360, scale: 1.2 }}
+            transition={{
+              repeat: Infinity,
+              duration: 25,
+              ease: 'linear',
+              repeatType: 'reverse'
+            }}
           >
-            <path d="M380 180.5C380 305 281.5 380 180.5 380S21 305 21 180.5 76 21 180.5 21 380 56 380 180.5Z" fill="#DEF2F1" />
+            <rect x="50" y="50" width="300" height="300" rx="50" fill="#DEF2F1" />
           </HeroAbstractShape>
-
           <HeroContentLeft
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
           >
-            <HeroTitle variants={itemVariants}>
-              Elevate Your Potential with<br /><TypewriterSpan id="typed-text">{typedText}</TypewriterSpan>
+            <HeroTitle>
+              Your Journey to IELTS Success Starts with <TypewriterSpan>{typedText}</TypewriterSpan>
             </HeroTitle>
             <HeroParagraph>
-              Transform your study habits. Effortlessly create quizzes, distill complex notes, and conquer exams like IELTS, all powered by intelligent AI.
+              Unlock your potential with our AI-driven platform designed to help you ace the IELTS exam. From personalized study plans to instant feedback on your writing, we're here to guide you every step of the way.
             </HeroParagraph>
-            <ActionButton variants={itemVariants} href="/modules">
-              Start Practicing
+            <ActionButton href="/signup">
+              Start Your Free Trial
             </ActionButton>
           </HeroContentLeft>
+          <HeroContentRight
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+          >
+            {/* <MotivatingSlogan>
+            </MotivatingSlogan> */}
+          </HeroContentRight>
         </HeroSection>
 
-        <SectionsContainer>
-          <SectionHeader
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.6 }}
-          >
-            Tools to Transform Your Learning
+        <SectionsContainer
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+        >
+          <SectionHeader variants={itemVariants}>
+            Why Choose Determined IELTS?
           </SectionHeader>
           <WhySection>
-            {sabrihinAITools.map((section, index) => (
+            {sabrihinAITools.map((tool, index) => (
               <WhyCard
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
-                <CardIcon>{section.icon}</CardIcon>
-                <WhyTitle>{section.title}</WhyTitle>
-                <WhyDescription>{section.description}</WhyDescription>
+                <CardIcon>{tool.icon}</CardIcon>
+                <WhyTitle>{tool.title}</WhyTitle>
+                <WhyDescription>{tool.description}</WhyDescription>
               </WhyCard>
             ))}
           </WhySection>
@@ -1155,30 +1226,28 @@ const App = () => {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.6 }}
         >
-          <CTATitle>
-            Ready to Transform Your Learning?
-          </CTATitle>
+          <CTATitle>Ready to start your journey?</CTATitle>
           <CTAButton
             href="/signup"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            Get Started
+            Get Started Now
           </CTAButton>
         </CTASection>
 
-        <TestimonialsSection>
-          <SectionHeader
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.6 }}
-          >
-            What Our Users Say
+        <TestimonialsSection
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+        >
+          <SectionHeader variants={itemVariants}>
+            What Our Students Say
           </SectionHeader>
           <TestimonialGrid>
             {testimonials.map((testimonial, index) => (
@@ -1213,10 +1282,10 @@ const App = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            Get Started Now
+            Start Your Free Trial
           </ActionButton>
         </ReadyToAceSection>
       </MainLayout>
