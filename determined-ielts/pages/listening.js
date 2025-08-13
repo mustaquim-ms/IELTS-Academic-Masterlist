@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import styled, { keyframes, createGlobalStyle } from 'styled-components';
+import styled, { keyframes, createGlobalStyle, css } from 'styled-components';
 import {
     BookOpen,
     Headphones,
@@ -9,6 +9,14 @@ import {
     CircleCheck,
     Loader2,
     Play,
+    Menu,
+    X,
+    Facebook,
+    Instagram,
+    Twitter,
+    Youtube,
+    Linkedin,
+    ChevronDown,
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
@@ -24,12 +32,23 @@ import {
 // ---------------------------- STYLED COMPONENTS --------------------------
 // =========================================================================
 
-// Global styles for the body and base typography
+// Global styles and color variables
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --primary-color-extra-dark: #1e3a8a;
+    --primary-color-dark: #2563eb;
+    --primary-color: #3b82f6;
+    --text-color-primary: #1a202c;
+    --text-color-secondary: #4a5568;
+    --background-color-light: #eff6ff;
+    --card-background: #ffffff;
+    --accent-color: #f59e0b;
+  }
+  
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
-    color: #1a202c;
+    background-color: var(--background-color);
+    color: var(--text-color-primary);
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -46,15 +65,16 @@ const pulse = keyframes`
 // Main page container with abstract animated background
 const PageContainer = styled.div`
   min-height: 100vh;
-  padding: 8rem 3rem 2rem;
+  padding-top: 8rem;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   @media (max-width: 768px) {
-    padding: 6rem 1rem 2rem;
+    padding-top: 6rem;
   }
 
   &::before {
@@ -102,6 +122,11 @@ const ContentWrapper = styled.div`
   width: 100%;
   position: relative;
   z-index: 10;
+  padding: 2rem 3rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 // Section header styles
@@ -113,7 +138,7 @@ const HeaderSection = styled(motion.div)`
 const PageTitle = styled.h1`
   font-size: 3.75rem;
   font-weight: 800;
-  color: #1e3a8a;
+  color: var(--primary-color-extra-dark);
   margin-bottom: 1rem;
 
   @media (max-width: 768px) {
@@ -123,7 +148,7 @@ const PageTitle = styled.h1`
 
 const PageSubtitle = styled.p`
   font-size: 1.25rem;
-  color: #4a5568;
+  color: var(--text-color-secondary);
   max-width: 48rem;
   margin: 0 auto;
 `;
@@ -153,16 +178,16 @@ const TabButton = styled.button`
   }
 
   ${({ $active }) => $active && `
-    background-color: #2563eb;
+    background-color: var(--primary-color-dark);
     color: white;
     box-shadow: 0 10px 15px rgba(37, 99, 235, 0.3);
   `}
 
   ${({ $active }) => !$active && `
-    background-color: white;
-    color: #1e3a8a;
+    background-color: var(--card-background);
+    color: var(--primary-color-extra-dark);
     &:hover {
-      background-color: #eff6ff;
+      background-color: var(--background-color-light);
     }
   `}
 `;
@@ -177,7 +202,7 @@ const ContentGrid = styled(motion.div)`
 
 // Card for practices and resources
 const PracticeCard = styled(motion.div)`
-  background: white;
+  background: var(--card-background);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
@@ -202,7 +227,7 @@ const CardHeader = styled.div`
 
 const IconWrapper = styled.div`
   padding: 0.75rem;
-  background-color: #3b82f6;
+  background-color: var(--primary-color);
   border-radius: 0.75rem;
   color: white;
 `;
@@ -210,11 +235,11 @@ const IconWrapper = styled.div`
 const CardTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e3a8a;
+  color: var(--primary-color-extra-dark);
 `;
 
 const CardDescription = styled.p`
-  color: #4a5568;
+  color: var(--text-color-secondary);
 `;
 
 const StartButton = styled.button`
@@ -222,7 +247,7 @@ const StartButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
-  color: #2563eb;
+  color: var(--primary-color-dark);
   font-weight: 600;
   background: none;
   border: none;
@@ -230,7 +255,7 @@ const StartButton = styled.button`
   transition: color 0.3s ease;
 
   &:hover {
-    color: #1e40af;
+    color: var(--primary-color-extra-dark);
   }
 `;
 
@@ -251,7 +276,7 @@ const AssessmentHeader = styled.div`
 const SectionTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
-  color: #1e3a8a;
+  color: var(--primary-color-extra-dark);
 
   @media (max-width: 768px) {
     font-size: 1.75rem;
@@ -260,7 +285,7 @@ const SectionTitle = styled.h2`
 
 const StartAssessmentButton = styled.button`
   padding: 0.75rem 1.5rem;
-  background-color: #f59e0b;
+  background-color: var(--accent-color);
   color: white;
   font-weight: 700;
   border-radius: 9999px;
@@ -277,7 +302,7 @@ const StartAssessmentButton = styled.button`
 
 const AssessmentUI = styled(motion.div)`
   padding: 2rem;
-  background: white;
+  background: var(--card-background);
   border-radius: 1.5rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   text-align: center;
@@ -286,7 +311,7 @@ const AssessmentUI = styled(motion.div)`
 
 const AssessmentPrompt = styled.p`
   font-size: 1.125rem;
-  color: #4a5568;
+  color: var(--text-color-secondary);
   margin-bottom: 1.5rem;
 `;
 
@@ -302,7 +327,7 @@ const AudioPlayerPlaceholder = styled.div`
 
 const SubmitButton = styled.button`
   padding: 1rem 2rem;
-  background-color: #f59e0b;
+  background-color: var(--accent-color);
   color: white;
   font-weight: 700;
   border-radius: 9999px;
@@ -336,7 +361,7 @@ const ResultsHeader = styled.div`
 const ResultsTitle = styled.h4`
   font-size: 1.875rem;
   font-weight: 800;
-  color: #1e3a8a;
+  color: var(--primary-color-extra-dark);
 `;
 
 const ResultsText = styled.p`
@@ -346,7 +371,7 @@ const ResultsText = styled.p`
 `;
 
 const HistoryItem = styled(motion.div)`
-  background: white;
+  background: var(--card-background);
   padding: 1.5rem;
   border-radius: 1.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -367,7 +392,7 @@ const LoaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 12rem;
-  color: #2563eb;
+  color: var(--primary-color-dark);
 `;
 
 const NoAssessments = styled(motion.div)`
@@ -375,14 +400,14 @@ const NoAssessments = styled(motion.div)`
   padding: 2rem;
   background: #f7fafc;
   border-radius: 1.5rem;
-  color: #4a5568;
+  color: var(--text-color-secondary);
 `;
 
 const UserIdDisplay = styled.div`
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  background-color: #1a202c;
+  background-color: var(--text-color-primary);
   color: white;
   font-size: 0.875rem;
   padding: 0.75rem;
@@ -393,18 +418,282 @@ const UserIdDisplay = styled.div`
 `;
 
 // =========================================================================
-// ------------------------------ CUSTOM HOOKS -----------------------------
+// ------------------------- NAVBAR STYLED COMPONENTS ----------------------
 // =========================================================================
+
+const Nav = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  z-index: 1000;
+  transition: all 0.3s ease-in-out;
+
+  @media (max-width: 768px) {
+    padding: 1rem 1rem;
+  }
+
+  ${({ $scrolled }) => $scrolled && css`
+    background-color: rgba(254, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  `}
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  gap: 2rem;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const NavLogo = styled(motion.div)`
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-color-extra-dark);
+  display: flex;
+  align-items: center;
+`;
+
+const NavLink = styled(motion.a)`
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color-dark);
+    transform: translateY(-5px) rotate(-1deg);
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  }
+`;
+
+const AuthButtons = styled(motion.div)`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const AuthButton = styled(motion.a)`
+  background-color: transparent;
+  border: 2px solid ${props => props.$primary ? 'var(--primary-color)' : 'transparent'};
+  color: ${props => props.$primary ? 'var(--primary-color)' : 'var(--text-color-secondary)'};
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: ${props => props.$primary ? 'var(--primary-color)' : 'transparent'};
+    color: ${props => props.$primary ? 'white' : 'var(--primary-color-dark)'};
+    box-shadow: ${props => props.$primary ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'};
+    transform: translateY(-2px);
+  }
+`;
+
+const NavSocial = styled.div`
+  display: flex;
+  gap: 1rem;
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+const SocialIcon = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  color: var(--primary-color-dark);
+  
+  &:hover {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+  }
+`;
+
+const DropdownContainer = styled.div`
+  position: relative;
+`;
+
+const DropdownMenu = styled(motion.div)`
+  position: absolute;
+  top: calc(100% + 1rem); /* Increased spacing */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  min-width: 200px;
+  z-index: 1001;
+`;
+
+const DropdownItem = styled.a`
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--text-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 6px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--background-color-light);
+    color: var(--primary-color-dark);
+  }
+`;
+
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 50;
+  color: var(--primary-color-dark);
+
+  @media (max-width: 1024px) {
+    display: block;
+  }
+`;
+
+const MobileMenu = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 70%;
+  background: white;
+  padding: 2rem;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  z-index: 40;
+`;
+
+const MobileNavLink = styled(NavLink)`
+  width: 100%;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+`;
+
+
+// =========================================================================
+// ------------------------- FOOTER STYLED COMPONENTS ----------------------
+// =========================================================================
+
+const FooterContainer = styled.footer`
+  width: 100%;
+  background: var(--text-color-primary);
+  color: #cbd5e0;
+  padding: 4rem 3rem 2rem;
+  margin-top: 4rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+  }
+`;
+
+const FooterGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  max-width: 72rem;
+  margin: 0 auto;
+`;
+
+const FooterSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const FooterTitle = styled.h4`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+`;
+
+const FooterLink = styled.a`
+  color: #a0aec0;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+`;
+
+const FooterCopyright = styled.p`
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+  border-top: 1px solid #2d3748;
+  padding-top: 1.5rem;
+`;
+
+// =========================================================================
+// ------------------------------ CUSTOM HOOKS & COMPONENTS -----------------------------
+// =========================================================================
+
+// Custom mock Link component since we're not in a Next.js environment
+const Link = ({ href, children, ...props }) => {
+    return <a href={href} {...props}>{children}</a>;
+};
+
+// Custom Hook for hover state
+const useHover = () => {
+    const [isHovering, setIsHovering] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const node = ref.current;
+        if (node) {
+            const handleMouseOver = () => setIsHovering(true);
+            const handleMouseOut = () => setIsHovering(false);
+            node.addEventListener('mouseover', handleMouseOver);
+            node.addEventListener('mouseout', handleMouseOut);
+            return () => {
+                node.removeEventListener('mouseover', handleMouseOver);
+                node.removeEventListener('mouseout', handleMouseOut);
+            };
+        }
+    }, []);
+
+    return [ref, isHovering];
+};
 
 // Custom hook to handle all Firebase logic and state
 const useFirebase = () => {
     const [db, setDb] = useState(null);
-    const [auth, setAuth] = useState(null);
     const [userId, setUserId] = useState(null);
     const [isAuthReady, setIsAuthReady] = useState(false);
 
     useEffect(() => {
-        // Check if the global variables exist before trying to access them
         if (typeof __firebase_config === 'undefined') {
             console.error("__firebase_config is not defined. Skipping Firebase initialization.");
             setIsAuthReady(false);
@@ -416,9 +705,6 @@ const useFirebase = () => {
             const app = initializeApp(firebaseConfig);
             const newAuth = getAuth(app);
             const newDb = getFirestore(app);
-
-            setAuth(newAuth);
-            setDb(newDb);
 
             const unsubscribe = onAuthStateChanged(newAuth, async (user) => {
                 if (user) {
@@ -435,6 +721,7 @@ const useFirebase = () => {
                 setIsAuthReady(true);
             });
 
+            setDb(newDb);
             return () => unsubscribe();
         } catch (error) {
             console.error("Firebase initialization failed:", error);
@@ -442,9 +729,207 @@ const useFirebase = () => {
         }
     }, []);
 
-    return { db, auth, userId, isAuthReady };
+    return { db, userId, isAuthReady };
 };
 
+// =========================================================================
+// ------------------------- NAV & FOOTER COMPONENTS -----------------------
+// =========================================================================
+
+const Navbar = () => {
+    const [aiToolsRef, isAiToolsHovering] = useHover();
+    const [ieltsModulesRef, isIeltsModulesHovering] = useHover();
+    const [scrolled, setScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const handleScroll = () => {
+        const offset = window.scrollY;
+        setScrolled(offset > 150);
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const dropdownVariants = {
+        hidden: { opacity: 0, y: -10, scaleY: 0.95 },
+        visible: { opacity: 1, y: 0, scaleY: 1, transition: { duration: 0.2, ease: 'easeOut' } },
+        exit: { opacity: 0, y: -10, scaleY: 0.95, transition: { duration: 0.15, ease: 'easeIn' } },
+    };
+
+    const aiTools = [
+        { name: 'Document Analysis', path: '/ai-tools/doc-analysis' },
+        { name: 'Quiz Generation', path: '/ai-tools/quiz-gen' },
+        { name: 'Personalized Assistance', path: '/ai-tools/personalized-assistance' },
+        { name: 'Smart Study Planner', path: '/ai-tools/study-planner' },
+        { name: 'IELTS Preparation', path: '/ai-tools/ielts-prep' },
+        { name: 'AI Image Generator', path: '/ai-tools/image-gen' },
+    ];
+
+    const ieltsModules = [
+        { name: 'Listening', path: '/listening' },
+        { name: 'Speaking', path: '/speaking' },
+        { name: 'Reading', path: '/reading' },
+        { name: 'Writing', path: '/writing' },
+    ];
+
+    const socialLinks = [
+        { name: 'facebook', icon: <Facebook />, url: 'https://www.facebook.com' },
+        { name: 'instagram', icon: <Instagram />, url: 'https://www.instagram.com' },
+        { name: 'twitter', icon: <Twitter />, url: 'https://www.twitter.com' },
+        { name: 'youtube', icon: <Youtube />, url: 'https://www.youtube.com' },
+        { name: 'linkedin', icon: <Linkedin />, url: 'https://www.linkedin.com' },
+    ];
+
+    return (
+        <>
+            <Nav $scrolled={scrolled}>
+                <NavLogo>
+                    {/* The logo now changes based on the 'scrolled' state */}
+                    <img
+                        src={scrolled ? '/scrolled.png' : '/logo_main.png'}
+                        alt="Determined IELTS Logo"
+                    />
+                </NavLogo>
+
+                <NavLinks>
+                    <NavLink href="./index.js">Home</NavLink>
+                    <DropdownContainer ref={aiToolsRef}>
+                        <NavLink as="span" >
+                            AI Tools
+                            <ChevronDown style={{ verticalAlign: 'middle', marginLeft: '8px' }} />
+                        </NavLink>
+                        <AnimatePresence>
+                            {isAiToolsHovering && (
+                                <DropdownMenu
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    variants={dropdownVariants}
+                                    style={{ originY: 0 }}
+                                >
+                                    {aiTools.map((tool, index) => (
+                                        <DropdownItem key={index} href={tool.path}>
+                                            {tool.name}
+                                        </DropdownItem>
+                                    ))}
+                                </DropdownMenu>
+                            )}
+                        </AnimatePresence>
+                    </DropdownContainer>
+
+                    <DropdownContainer ref={ieltsModulesRef}>
+                        <NavLink as="span" >
+                            IELTS Modules
+                            <ChevronDown style={{ verticalAlign: 'middle', marginLeft: '8px' }} />
+                        </NavLink>
+                        <AnimatePresence>
+                            {isIeltsModulesHovering && (
+                                <DropdownMenu
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="exit"
+                                    variants={dropdownVariants}
+                                    style={{ originY: 0 }}
+                                >
+                                    {ieltsModules.map((tool, index) => (
+                                        <DropdownItem key={index} href={tool.path}>
+                                            {tool.name}
+                                        </DropdownItem>
+                                    ))}
+                                </DropdownMenu>
+                            )}
+                        </AnimatePresence>
+                    </DropdownContainer>
+                    <NavLink href="./blog">Blogs</NavLink>
+                    <NavLink href="./about_us">About Us</NavLink>
+                    <NavLink href="./contact">Contact</NavLink>
+                </NavLinks>
+
+                {scrolled ? (
+                    <NavSocial>
+                        {socialLinks.map((link, index) => (
+                            <SocialIcon key={index} href={link.url} target="_blank" rel="noopener noreferrer">
+                                {link.icon}
+                            </SocialIcon>
+                        ))}
+                    </NavSocial>
+                ) : (
+                    <AuthButtons>
+                        <AuthButton href="#">Login</AuthButton>
+                        <AuthButton $primary href="#">Sign Up</AuthButton>
+                    </AuthButtons>
+                )}
+                <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </MobileMenuButton>
+            </Nav>
+
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <MobileMenu
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <MobileNavLink href="#">Home</MobileNavLink>
+                        <MobileNavLink href="#">AI Tools</MobileNavLink>
+                        <MobileNavLink href="#">IELTS Modules</MobileNavLink>
+                        <MobileNavLink href="#">About Us</MobileNavLink>
+                        <MobileNavLink href="#">Contact</MobileNavLink>
+                        <AuthButton href="#">Login</AuthButton>
+                        <AuthButton $primary href="#">Sign Up</AuthButton>
+                    </MobileMenu>
+                )}
+            </AnimatePresence>
+        </>
+    );
+};
+
+
+const Footer = () => {
+    return (
+        <FooterContainer>
+            <FooterGrid>
+                <FooterSection>
+                    <FooterTitle>Company</FooterTitle>
+                    <FooterLink href="#">About Us</FooterLink>
+                    <FooterLink href="#">Contact</FooterLink>
+                    <FooterLink href="#">Careers</FooterLink>
+                </FooterSection>
+                <FooterSection>
+                    <FooterTitle>Resources</FooterTitle>
+                    <FooterLink href="#">Listening</FooterLink>
+                    <FooterLink href="#">Reading</FooterLink>
+                    <FooterLink href="#">Writing</FooterLink>
+                    <FooterLink href="#">Speaking</FooterLink>
+                </FooterSection>
+                <FooterSection>
+                    <FooterTitle>Legal</FooterTitle>
+                    <FooterLink href="#">Privacy Policy</FooterLink>
+                    <FooterLink href="#">Terms of Service</FooterLink>
+                </FooterSection>
+                <FooterSection>
+                    <FooterTitle>Follow Us</FooterTitle>
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                        <FooterLink href="#"><Facebook size={24} /></FooterLink>
+                        <FooterLink href="#"><Instagram size={24} /></FooterLink>
+                        <FooterLink href="#"><Twitter size={24} /></FooterLink>
+                        <FooterLink href="#"><Youtube size={24} /></FooterLink>
+                        <FooterLink href="#"><Linkedin size={24} /></FooterLink>
+                    </div>
+                </FooterSection>
+            </FooterGrid>
+            <FooterCopyright>
+                &copy; {new Date().getFullYear()} IELTS Pro. All rights reserved.
+            </FooterCopyright>
+        </FooterContainer>
+    );
+};
 
 // =========================================================================
 // ------------------------- MAIN REACT COMPONENT --------------------------
@@ -592,6 +1077,8 @@ const ListeningPage = () => {
     return (
         <>
             <GlobalStyle />
+            <Navbar />
+
             <PageContainer>
                 <BlueCircle initial={{ x: -200, y: -200 }} animate={{ x: 200, y: 200 }} transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }} />
                 <YellowCircle initial={{ x: 200, y: 200 }} animate={{ x: -200, y: -200 }} transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }} />
@@ -724,6 +1211,7 @@ const ListeningPage = () => {
                     <p style={{ fontFamily: 'monospace' }}>{userId || 'Loading...'}</p>
                 </UserIdDisplay>
             </PageContainer>
+            <Footer />
         </>
     );
 };
