@@ -133,10 +133,10 @@ export default function Navbar() {
       <NavContent>
         <Logo href="/">Determined IELTS</Logo>
         <NavLinks>
-          <NavLink href="/listening">Listening</NavLink>
-          <NavLink href="/reading">Reading</NavLink>
-          <NavLink href="/writing">Writing</NavLink>
-          <NavLink href="/speaking">Speaking</NavLink>
+          <NavLink href="./listening">Listening</NavLink>
+          <NavLink href="./reading">Reading</NavLink>
+          <NavLink href="./writing">Writing</NavLink>
+          <NavLink href="./speaking">Speaking</NavLink>
         </NavLinks>
         <motion.div>
           {isScrolled && (

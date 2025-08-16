@@ -18,14 +18,14 @@ const FooterText = styled.p`
 `;
 
 export default function Footer() {
-    return (
-        <FooterContainer
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-        >
-            <FooterText>© 2023 Determined IELTS. All rights reserved.</FooterText>
-        </FooterContainer>
-    );
+  return (
+    <FooterContainer
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
+      <FooterText>© 2023 Determined IELTS. All rights reserved.</FooterText>
+    </FooterContainer>
+  );
 }

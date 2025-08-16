@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,41 +9,13 @@ import { Facebook, Instagram, Twitter, Youtube, Linkedin, ChevronDown } from 'lu
 // To fix this, we'll load it via a CDN script tag in the HTML head and access it globally.
 // This is a robust workaround for environments where direct module imports fail.
 
-// Custom Hook to replace 'react-intersection-observer'
-const useInView = (options) => {
-  const [inView, setInView] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setInView(true);
-        // Disconnect after the first time to avoid re-triggering
-        observer.disconnect();
-      }
-    }, options);
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      if (ref.current) {
-        observer.disconnect();
-      }
-    };
-  }, [options]);
-
-  return [ref, inView];
-};
-
 // Custom Hook for Dropdown
 const useHover = () => {
   const [isHovering, setIsHovering] = useState(false);
   const ref = useRef(null);
 
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => setIsHovering(false);
+  const handleMouseEnter = useCallback(() => setIsHovering(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
   useEffect(() => {
     const node = ref.current;
@@ -56,10 +28,11 @@ const useHover = () => {
         node.removeEventListener('mouseleave', handleMouseLeave);
       };
     }
-  }, [ref]);
+  }, [handleMouseEnter, handleMouseLeave]);
 
   return [ref, isHovering];
 };
+
 
 // Global styles for custom cursors, fonts, and new color variables
 const GlobalStyle = createGlobalStyle`
@@ -91,35 +64,9 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
   }
-
-  /* Tailwind base styles for new components */
-  .relative { position: relative; }
-  .z-0 { z-index: 0; }
-  .z-10 { z-index: 10; }
-  .fixed { position: fixed; }
-  .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-  .transform { transform: var(--tw-transform); }
-  .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 0.5s; }
-  .duration-1000 { transition-duration: 1000ms; }
-  .ease-out { transition-timing-function: cubic-bezier(0, 0, 0.2, 1); }
-  .opacity-0 { opacity: 0; }
-  .opacity-100 { opacity: 1; }
-  .translate-y-0 { --tw-translate-y: 0; }
-  .translate-y-10 { --tw-translate-y: 2.5rem; }
-  .scale-95 { --tw-scale-x: 0.95; --tw-scale-y: 0.95; }
-  .scale-100 { --tw-scale-x: 1; --tw-scale-y: 1; }
-  .from-left { transform: translateX(-50px); }
-  .from-right { transform: translateX(50px); }
-  .from-left.translate-y-0 { transform: translateX(0); }
-  .from-right.translate-y-0 { transform: translateX(0); }
 `;
 
 // Keyframes for typewriter effect
-const typing = keyframes`
-  from { width: 0; }
-  to { width: 100%; }
-`;
-
 const blink = keyframes`
   50% { border-color: transparent; }
 `;
@@ -165,7 +112,12 @@ const Nav = styled.nav`
 
 const NavLinks = styled.div`
   display: flex;
+  align-items: center;
   gap: 2rem;
+  
+  @media (max-width: 1024px) {
+    display: none; // Example: hide on smaller screens
+  }
 `;
 
 const NavLogo = styled(motion.div)`
@@ -189,6 +141,8 @@ const NavLink = styled(Link)`
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  align-items: center;
 
   &:hover {
     color: var(--primary-color-dark);
@@ -222,26 +176,6 @@ const AuthButton = styled(Link)`
   }
 `;
 
-const NavSocial = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const SocialIcon = styled.a`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  transition: transform 0.3s ease;
-  color: var(--primary-color-dark);
-
-  &:hover {
-    transform: translateY(-2px);
-    color: var(--primary-color);
-  }
-`;
-
 const DropdownContainer = styled.div`
   position: relative;
 `;
@@ -257,6 +191,7 @@ const DropdownMenu = styled(motion.div)`
   padding: 0.5rem;
   min-width: 200px;
   z-index: 1001;
+  margin-top: 1rem;
 `;
 
 const DropdownItem = styled(Link)`
@@ -362,6 +297,7 @@ const TypewriterSpan = styled.span`
   white-space: nowrap;
   letter-spacing: .05em;
   font-weight: 800;
+  animation: ${blink} 1s step-end infinite;
 `;
 
 const ActionButton = styled(motion(Link))`
@@ -379,14 +315,6 @@ const ActionButton = styled(motion(Link))`
     transform: translateY(-3px);
     background-color: var(--primary-color-dark); /* Color change on hover */
   }
-`;
-
-const MotivatingSlogan = styled(motion.h2)`
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 800;
-  color: var(--card-background);
-  line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 `;
 
 // General Sections
@@ -576,29 +504,37 @@ const TestimonialAuthor = styled.p`
 `;
 
 
+// Social Icon for Navbar & Footer
+const SocialIcon = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  color: var(--primary-color-dark);
+
+  &:hover {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+  }
+`;
+
 // Helper components for the Navbar and Footer
 const Navbar = () => {
-  const [ref, isHovering] = useHover();
-  const [ieltsModulesRef, isIeltsModulesHovering] = useHover();
   const [scrolled, setScrolled] = useState(false);
-
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    setScrolled(offset > 150);
-  };
+  const [aiToolsRef, isAiToolsHovering] = useHover();
+  const [ieltsModulesRef, isIeltsModulesHovering] = useHover();
 
   useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  const dropdownVariants = {
-    hidden: { opacity: 0, y: -10, scaleY: 0.95 },
-    visible: { opacity: 1, y: 0, scaleY: 1, transition: { duration: 0.2, ease: 'easeOut' } },
-    exit: { opacity: 0, y: -10, scaleY: 0.95, transition: { duration: 0.15, ease: 'easeIn' } },
-  };
 
   const aiTools = [
     { name: 'Document Analysis', path: '/ai-tools/doc-analysis' },
@@ -616,206 +552,182 @@ const Navbar = () => {
     { name: 'Writing', path: '/writing' },
   ];
 
-  const socialLinks = [
-    { name: 'facebook', icon: <Facebook />, url: 'https://www.facebook.com' },
-    { name: 'instagram', icon: <Instagram />, url: 'https://www.instagram.com' },
-    { name: 'twitter', icon: <Twitter />, url: 'https://www.twitter.com' },
-    { name: 'youtube', icon: <Youtube />, url: 'https://www.youtube.com' },
-    { name: 'linkedin', icon: <Linkedin />, url: 'https://www.linkedin.com' },
-  ];
-
   return (
     <Nav className={scrolled ? 'scrolled' : ''}>
       <NavLogo>
-        {/* The logo now changes based on the 'scrolled' state */}
-        <img
-          src={scrolled ? '/scrolled.png' : '/logo_main.png'}
-          alt="Determined IELTS Logo"
-        />
+        <Link href="/" passHref>
+          <motion.img
+            src={scrolled ? "/scrolled.png" : "/logo_main.png"}
+            alt="Determined IELTS Logo"
+            whileHover={{ scale: 1.05 }}
+          />
+        </Link>
       </NavLogo>
+
       <NavLinks>
-        <NavLink href="./index.js">Home</NavLink>
-        <DropdownContainer ref={ref}>
-          <NavLink href="#" as="span">
-            AI Tools
-            <ChevronDown style={{ verticalAlign: 'middle', marginLeft: '8px' }} />
+        <NavLink href="/">Home</NavLink>
+
+        <DropdownContainer ref={aiToolsRef}>
+          <NavLink href="#">
+            AI Tools <ChevronDown size={16} style={{ marginLeft: '4px' }} />
           </NavLink>
           <AnimatePresence>
-            {isHovering && (
+            {isAiToolsHovering && (
               <DropdownMenu
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                variants={dropdownVariants}
-                style={{ originY: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
               >
-                {aiTools.map((tool, index) => (
-                  <DropdownItem key={index} href={tool.path}>
-                    {tool.name}
-                  </DropdownItem>
+                {aiTools.map((tool) => (
+                  <DropdownItem key={tool.name} href={tool.path}>{tool.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             )}
           </AnimatePresence>
         </DropdownContainer>
+
         <DropdownContainer ref={ieltsModulesRef}>
-          <NavLink href="#" as="span">
-            IELTS Modules
-            <ChevronDown style={{ verticalAlign: 'middle', marginLeft: '8px' }} />
+          <NavLink href="#">
+            IELTS Modules <ChevronDown size={16} style={{ marginLeft: '4px' }} />
           </NavLink>
           <AnimatePresence>
             {isIeltsModulesHovering && (
               <DropdownMenu
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                variants={dropdownVariants}
-                style={{ originY: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2 }}
               >
-                {ieltsModules.map((tool, index) => (
-                  <DropdownItem key={index} href={tool.path}>
-                    {tool.name}
-                  </DropdownItem>
+                {ieltsModules.map((module) => (
+                  <DropdownItem key={module.name} href={module.path}>{module.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             )}
           </AnimatePresence>
         </DropdownContainer>
-        <NavLink href="./blog">Blogs</NavLink>
+
+        <NavLink href="/blog">Blogs</NavLink>
         <NavLink href="/about_us">About Us</NavLink>
         <NavLink href="/contact">Contact</NavLink>
       </NavLinks>
 
-      {/* Conditionally render login buttons or social icons based on scroll position */}
-      {scrolled ? (
-        <NavSocial>
-          {socialLinks.map((link, index) => (
-            <SocialIcon key={index} href={link.url} target="_blank" rel="noopener noreferrer">
-              {link.icon}
-            </SocialIcon>
-          ))}
-        </NavSocial>
-      ) : (
-        <AuthButtons>
-          <AuthButton href="/login">Login</AuthButton>
-          <AuthButton primary href="/signup">Sign Up</AuthButton>
-        </AuthButtons>
-      )}
+      <AuthButtons>
+        <AuthButton href="/login">Log In</AuthButton>
+        <AuthButton href="/signup" primary>Sign Up</AuthButton>
+      </AuthButtons>
     </Nav>
   );
 };
 
 const FooterContainer = styled.footer`
-  background-color: var(--primary-color-extra-dark);
-  padding: 4rem 2rem;
-  color: var(--background-color-light);
-  position: relative;
-  z-index: 10;
+    background-color: var(--primary-color-extra-dark);
+    padding: 4rem 2rem;
+    color: var(--background-color-light);
+    position: relative;
+    z-index: 10;
 `;
 
 const FooterGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
 `;
 
 const FooterSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 `;
 
 const FooterTitle = styled.h4`
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
 `;
 
 const FooterLink = styled(Link)`
-  color: var(--background-color-light);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  &:hover {
-    color: var(--primary-color);
-    transform: translateY(-2px);
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-  }
+    color: var(--background-color-light);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    &:hover {
+        color: var(--primary-color);
+        transform: translateX(2px);
+    }
 `;
 
 const FooterText = styled.p`
-  font-size: 1rem;
-  line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.6;
 `;
 
 const SubscriptionBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 `;
 
 const SubscriptionInput = styled.input`
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border-radius: 9999px;
-  border: 1px solid var(--background-color-light);
-  background-color: var(--background-color-light);
-  color: var(--text-color);
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
-  &:focus {
-    outline: none;
-    border-color: var(--primary-color);
-  }
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 9999px;
+    border: 1px solid var(--background-color-light);
+    background-color: var(--background-color-light);
+    color: var(--text-color);
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+    &:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
 `;
 
 const SubscriptionButton = styled.button`
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--primary-color-extra-dark);
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  &:hover {
-    background-color: var(--primary-color-dark);
-    transform: translateY(-2px);
-    color: var(--card-background);
-  }
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--primary-color-extra-dark);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    &:hover {
+        background-color: var(--primary-color-dark);
+        transform: translateY(-2px);
+        color: var(--card-background);
+    }
 `;
 
 const FooterBottom = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  padding-top: 2rem;
-  font-size: 0.9rem;
-  color: var(--background-color-light);
-  border-top: 1px solid rgba(254, 255, 255, 0.1);
-  margin-top: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--background-color-light);
+    border-top: 1px solid rgba(254, 255, 255, 0.1);
+    margin-top: 2rem;
 `;
 
 const FooterSocials = styled.div`
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
 `;
 
 const FooterLogo = styled.img`
-  height: 50px;
-  width: auto;
-  object-fit: contain; /* Ensures the image is not stretched */
-  margin-bottom: 1rem;
+    height: 50px;
+    width: auto;
+    object-fit: contain; /* Ensures the image is not stretched */
+    margin-bottom: 1rem;
 `;
 
 const Footer = () => {
@@ -844,10 +756,10 @@ const Footer = () => {
         </FooterSection>
         <FooterSection>
           <FooterTitle>IELTS Modules</FooterTitle>
-          <FooterLink href="./listening.js">Listening</FooterLink>
-          <FooterLink href="./reading.js">Reading</FooterLink>
-          <FooterLink href="./writing.js">Writing</FooterLink>
-          <FooterLink href="./speaking.js">Speaking</FooterLink>
+          <FooterLink href="/listening">Listening</FooterLink>
+          <FooterLink href="/reading">Reading</FooterLink>
+          <FooterLink href="/writing">Writing</FooterLink>
+          <FooterLink href="/speaking">Speaking</FooterLink>
         </FooterSection>
         <FooterSection>
           <FooterTitle>Help & Support</FooterTitle>
@@ -875,7 +787,7 @@ const sabrihinAITools = [
     title: 'Document Analysis',
     description: 'Get detailed insights from your documents.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 10h8v2H8v-2zm0 4h8v2H8v-2zm0 4h5v2H8v-2z" />
       </svg>
     )
@@ -884,7 +796,7 @@ const sabrihinAITools = [
     title: 'Quiz Generation',
     description: 'Automatically create quizzes from any text.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 4H3a1 1 0 00-1 1v14a1 1 0 001 1h18a1 1 0 001-1V5a1 1 0 00-1-1zm-9 14h-2V12h2v6zm4-2h-2V12h2v4zm-8-4v4H6V12h2zm10 0h-2v2h2v-2zM9 8h6v2H9V8z" />
       </svg>
     )
@@ -893,7 +805,7 @@ const sabrihinAITools = [
     title: 'Personalized Assistance',
     description: 'Receive tailored feedback and study plans.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 15h-1V9h-1V8h3v9zm3 0h-3v-2h3v2zm3-4h-3v-2h3v2zm0-4h-3V8h3v1z" />
       </svg>
     )
@@ -902,7 +814,7 @@ const sabrihinAITools = [
     title: 'Smart Study Planner',
     description: 'Organize your study schedule efficiently.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 21c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H5V8h14v13z" />
       </svg>
     )
@@ -911,7 +823,7 @@ const sabrihinAITools = [
     title: 'IELTS Preparation',
     description: 'Practice tests and mock exams for all sections.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 15H6v-2h6v2zm3-4H9v-2h6v2zm3-4H6v-2h12v2z" />
       </svg>
     )
@@ -920,7 +832,7 @@ const sabrihinAITools = [
     title: 'AI Image Generator',
     description: 'Create images from text descriptions.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12zm-6-4.5l-2.03-2.61L8 15.61l-1.97-2.53-2.03-2.61-2.03-2.61L2.1 16.61zM11 9H9v-2h2v2zm4 0h-2v-2h2v2zM7 9H5v-2h2v2z" />
       </svg>
     )
@@ -929,7 +841,7 @@ const sabrihinAITools = [
     title: 'Image Vision API',
     description: 'Analyze and understand images using AI.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 4C7.31 4 3.07 6.43 0 12c3.07 5.57 7.31 8 12 8s8.93-2.43 12-8c-3.07-5.57-7.31-8-12-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" />
       </svg>
     )
@@ -938,7 +850,7 @@ const sabrihinAITools = [
     title: 'Document Upload',
     description: 'Securely upload and manage your files.',
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
         <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6-6v4h-2V6H8.5L12 2.5 15.5 6H13z" />
       </svg>
     )
@@ -953,6 +865,12 @@ const testimonials = [
   { quote: "I have been able to improve on my previous score with Determined IELTS amazing methods. Best of luck to them.", author: "Mantasha Arpi, Tangail" },
   { quote: "I was so sceptical at first, but later I was so amazed by the way they teach and train. Got my best score and all thanks to them.", author: "Tanvir Rahman, Dhaka" },
 ];
+
+// Constants for the typewriter effect moved outside the component
+const words = ['Limitless Efforts.', 'Brilliance.', 'Creativity.', 'Exceptional Ideas.', 'Excellence.', 'Determination.', 'Passion.'];
+const typingSpeed = 150;
+const deletingSpeed = 80;
+const delayBetweenWords = 1500;
 
 const App = () => {
   const containerVariants = {
@@ -978,32 +896,6 @@ const App = () => {
   const [wordIndex, setWordIndex] = useState(0);
   const [typedText, setTypedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const words = ['Limitless Efforts.', 'Brilliance.', 'Creativity.', 'Exceptional Ideas.', 'Excellence.', 'Determination. &', 'Passion.'];
-  const typingSpeed = 150;
-  const deletingSpeed = 80;
-  const delayBetweenWords = 1500;
-
-
-  // This is a simplified example of the logic you need.
-  const Typewriter = ({ text }) => {
-    const [typedText, setTypedText] = useState("");
-    const [index, setIndex] = useState(0);
-
-    useEffect(() => {
-      // Only run if there is more text to type
-      if (index < text.length) {
-        const timeoutId = setTimeout(() => {
-          setTypedText(typedText + text.charAt(index));
-          setIndex(index + 1);
-        }, 100); // Adjust speed here
-
-        return () => clearTimeout(timeoutId); // Clean up the timer
-      }
-    }, [index, text, typedText]);
-
-    return <TypewriterSpan>{typedText}</TypewriterSpan>;
-  };
-
 
   useEffect(() => {
     const handleTyping = () => {
@@ -1038,11 +930,12 @@ const App = () => {
   // Three.js Background Animation
   useEffect(() => {
     // Check if THREE is available globally before proceeding
-    if (!canvasRef.current || typeof THREE === 'undefined') {
+    if (!canvasRef.current || typeof window.THREE === 'undefined') {
       console.error("THREE.js is not available. Skipping canvas animation.");
       return;
     }
 
+    const THREE = window.THREE;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.current, alpha: true });
@@ -1077,8 +970,9 @@ const App = () => {
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
+    let animationFrameId;
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       const positionAttribute = particles.geometry.attributes.position;
       for (let i = 0; i < positionAttribute.count; i++) {
         positionAttribute.array[i * 3] += velocities[i * 3];
@@ -1107,6 +1001,7 @@ const App = () => {
     animate();
     return () => {
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationFrameId);
       renderer.dispose();
     };
   }, []);
@@ -1118,7 +1013,7 @@ const App = () => {
         <meta name="description" content="Prepare for the IELTS exam with Determined IELTS practice modules." />
         <link rel="icon" href="/favicon.ico" />
         {/* Load Three.js from CDN to avoid module import errors */}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
       </Head>
       <GlobalStyle />
       <Navbar />
@@ -1178,7 +1073,7 @@ const App = () => {
               Your Journey to IELTS Success Starts with <TypewriterSpan>{typedText}</TypewriterSpan>
             </HeroTitle>
             <HeroParagraph>
-              Unlock your potential with our AI-driven platform designed to help you ace the IELTS exam. From personalized study plans to instant feedback on your writing, we're here to guide you every step of the way.
+              Unlock your potential with our AI-driven platform designed to help you ace the IELTS exam. From personalized study plans to instant feedback on your writing, we&apos;re here to guide you every step of the way.
             </HeroParagraph>
             <ActionButton href="/signup">
               Start Your Free Trial
@@ -1189,8 +1084,6 @@ const App = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7 }}
           >
-            {/* <MotivatingSlogan>
-            </MotivatingSlogan> */}
           </HeroContentRight>
         </HeroSection>
 
@@ -1230,10 +1123,6 @@ const App = () => {
           <CTATitle>Ready to start your journey?</CTATitle>
           <CTAButton
             href="/signup"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -1261,7 +1150,7 @@ const App = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <TestimonialText>"{testimonial.quote}"</TestimonialText>
+                <TestimonialText>&quot;{testimonial.quote}&quot;</TestimonialText>
                 <TestimonialAuthor>- {testimonial.author}</TestimonialAuthor>
               </TestimonialCard>
             ))}
@@ -1279,10 +1168,6 @@ const App = () => {
           </ReadyToAceTitle>
           <ActionButton
             href="/signup"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
