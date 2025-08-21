@@ -1,3 +1,5 @@
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,6 +18,9 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/script.js' %}" defer></script>
+
 </head>
 
 <body>
@@ -23,7 +28,7 @@
     <!-- Navbar -->
     <nav id="navbar" class="navbar">
         <div class="nav-container">
-            <img src="{% static 'assets/logo_main.png' %}" class="logo" alt="Determined IELTS">
+            <img src="{% static 'assets/logo_main.png' %}" alt="Logo">
             <ul class="nav-links">
                 <li><a href="{% url 'blogs' %}">Blogs</a></li>
                 <li><a href="{% url 'videos' %}">Videos</a></li>
@@ -54,10 +59,10 @@
             <p>Track your scores, get insights, and improve faster.</p>
         </section>
 
-        <section class="graph-section" data-aos="fade-up">
-            <h2>Your Progress</h2>
+        <div class="graph-container">
+            <h2>Track Your IELTS Progress 📊</h2>
             <canvas id="progressChart" width="400" height="200"></canvas>
-        </section>
+        </div>
 
         <section class="cta-section" data-aos="fade-up">
             <h2>Be Determined. Be Prepared.</h2>
@@ -79,14 +84,8 @@
     <!-- AOS.js -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/a2e0f1f0f3.js" crossorigin="anonymous"></script>
-
-    <!-- Custom JS -->
-    <script src="{% static 'js/script.js' %}"></script>
 
     <script>
         // Typed.js setup
