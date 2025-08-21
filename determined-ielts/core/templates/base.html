@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Determined IELTS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Orbitron:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <img src="{% static 'assets/logo_main.png' %}" class="logo" alt="Determined IELTS">
+            <ul class="nav-links">
+                <li><a href="{% url 'blogs' %}">Blogs</a></li>
+                <li><a href="{% url 'videos' %}">Videos</a></li>
+                <li><a href="{% url 'resources' %}">Resources</a></li>
+                <li><a href="{% url 'ielts_module' %}">IELTS Module</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'auth' %}" class="btn-auth">Login / Signup</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="{% static 'assets/logo_main.png' %}" alt="Logo" class="hero-logo">
+        <h1 class="hero-title">Determined IELTS</h1>
+        <h2 class="hero-typed"><span id="typed-text"></span></h2>
+    </section>
+
+    <!-- Homepage Sections -->
+    <main>
+        <section class="feature-section" data-aos="fade-up">
+            <h2>AI Powered IELTS Learning</h2>
+            <p>Track your scores, get insights, and improve faster.</p>
+        </section>
+
+        <section class="graph-section" data-aos="fade-up">
+            <h2>Your Progress</h2>
+            <canvas id="progressChart" width="400" height="200"></canvas>
+        </section>
+
+        <section class="cta-section" data-aos="fade-up">
+            <h2>Be Determined. Be Prepared.</h2>
+            <a href="{% url 'auth' %}" class="cta-btn">Start Learning</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Determined IELTS. All Rights Reserved.</p>
+            <p class="quote">“Consistency beats intensity. Stay determined.”</p>
+        </div>
+    </footer>
+
+    <!-- Typed.js -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+    <!-- AOS.js -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- FontAwesome -->
+    <script src="https://kit.fontawesome.com/a2e0f1f0f3.js" crossorigin="anonymous"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+        // Typed.js setup
+        var typed = new Typed("#typed-text", {
+            strings: [
+                "Master IELTS with Determination...",
+                "Track your progress with AI...",
+                "Achieve your goals faster..."
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+
+        // Init AOS
+        AOS.init();
+
+        // Chart.js Example
+        var ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["Test 1", "Test 2", "Test 3", "Test 4"],
+                datasets: [{
+                    label: 'IELTS Score',
+                    data: [5.5, 6.0, 6.5, 7.0],
+                    borderColor: '#00f2fe',
+                    backgroundColor: 'rgba(0,242,254,0.2)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            }
+        });
+    </script>
+
+</body>
+
+</html>
