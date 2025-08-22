@@ -5,11 +5,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Determined - AI Powered IELTS</title>
+
+    <!-- Styles -->
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&family=Comic+Neue:wght@700&display=swap"
         rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- AOS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
@@ -21,69 +28,205 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="container">
-            <a href="index.html" class="logo">Determined</a>
+        <div class="container navbar-layout">
+            <!-- Left: Menu -->
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="#">AI Tools</a></li>
-                <li><a href="#">IELTS Modules</a></li>
-                <li><a href="#">Resources</a></li>
-                <li><a href="#">Blogs</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="ai.html">AI Tools</a></li>
+                <li><a href="ielts.html">IELTS Modules</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
+
+            <!-- Center: Logo -->
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="Determined Logo" height="45" />
+            </a>
+
+            <!-- Right: Actions -->
             <div class="nav-actions">
                 <a href="login.html" class="btn-login">Login</a>
                 <a href="signup.html" class="btn-primary small">Sign Up</a>
             </div>
         </div>
+        <!-- Sticky social icons when scrolling -->
+        <div class="sticky-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero">
-        <div class="hero-content" data-aos="fade-up">
-            <h1><span id="typing"></span></h1>
-            <p>Achieve your IELTS goals with AI-driven insights and personalized learning.</p>
-            <a href="signup.html" class="btn-primary">Get Started</a>
+    <header class="hero fade-in" data-animate>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="fade-in" data-animate>
+                    Unlocking the future with <br>
+                    <span id="typed-text"></span>
+                </h1>
+                <p class="fade-in" data-animate>Achieve IELTS success with AI-powered feedback and personalized study
+                    paths tailored to you.</p>
+                <div class="hero-actions">
+                    <a href="signup.html" class="btn-primary">Get Started</a>
+                    <a href="resources.html" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image zoom-in" data-animate>
+                <img src="assets/images/hero-students.png" alt="Students Learning" />
+            </div>
         </div>
-        <div class="floating-shapes">
-            <div class="shape circle"></div>
-            <div class="shape blob"></div>
-            <div class="shape circle small"></div>
-        </div>
-        <div class="wave"></div>
     </header>
 
-    <!-- Features Section -->
-    <section class="features">
-        <h2 data-aos="fade-up">Why Choose Determined?</h2>
-        <div class="feature-grid">
-            <div class="feature-card" data-aos="fade-up">
-                <div class="icon">🤖</div>
-                <h3>AI Insights</h3>
-                <p>Real-time feedback on your IELTS practice.</p>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
-                <div class="icon">🎯</div>
-                <h3>Targeted Practice</h3>
-                <p>Adaptive learning that improves where it matters most.</p>
-            </div>
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="icon">📚</div>
-                <h3>Rich Resources</h3>
-                <p>Expert guides, blogs, and personalized strategies.</p>
+    <!-- Partners Section -->
+    <section class="partners fade-in" data-animate>
+        <div class="container">
+            <h3>Trusted by learners worldwide</h3>
+            <div class="partners-logos">
+                <img src="assets/images/partner1.png" alt="partner" />
+                <img src="assets/images/partner2.png" alt="partner" />
+                <img src="assets/images/partner3.png" alt="partner" />
+                <img src="assets/images/partner4.png" alt="partner" />
             </div>
         </div>
     </section>
 
-    <!-- Dashboard Preview -->
-    <section class="dashboard">
-        <h2 data-aos="fade-up">Track Your Progress</h2>
-        <canvas id="progressChart"></canvas>
+    <!-- Features Section -->
+    <section class="features fade-in" data-animate>
+        <div class="container">
+            <h2>Why Choose Determined?</h2>
+            <div class="feature-grid">
+                <div class="feature-card slide-in-left" data-animate>
+                    <i class="fa-solid fa-robot"></i>
+                    <h3>AI Insights</h3>
+                    <p>Get real-time feedback on your IELTS practice.</p>
+                </div>
+                <div class="feature-card zoom-in" data-animate>
+                    <i class="fa-solid fa-bullseye"></i>
+                    <h3>Targeted Practice</h3>
+                    <p>Adaptive learning focused on your weak spots.</p>
+                </div>
+                <div class="feature-card slide-in-right" data-animate>
+                    <i class="fa-solid fa-book"></i>
+                    <h3>Rich Resources</h3>
+                    <p>Guides, blogs, and personalized strategies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses fade-in" data-animate>
+        <div class="container">
+            <h2>Shaping the innovators of tomorrow</h2>
+            <div class="course-grid">
+                <div class="course-card zoom-in" data-animate>
+                    <img src="assets/images/course1.png" alt="course" />
+                    <h3>IELTS Fundamentals Bootcamp</h3>
+                    <p>4 weeks of intensive IELTS prep with AI feedback.</p>
+                    <a href="resources.html" class="btn-secondary">Enroll Now</a>
+                </div>
+                <div class="course-card zoom-in" data-animate>
+                    <img src="assets/images/course2.png" alt="course" />
+                    <h3>Advanced IELTS Masterclass</h3>
+                    <p>Target Band 8+ with smart strategies and feedback.</p>
+                    <a href="resources.html" class="btn-secondary">Enroll Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing fade-in" data-animate>
+        <div class="container">
+            <h2>Our Membership Plans</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card slide-in-left" data-animate>
+                    <h3>Basic Membership</h3>
+                    <p class="price">$10/month</p>
+                    <ul>
+                        <li>Access to IELTS modules</li>
+                        <li>AI feedback (basic)</li>
+                        <li>Community support</li>
+                    </ul>
+                    <a href="signup.html" class="btn-primary">Get Started</a>
+                </div>
+                <div class="pricing-card slide-in-right" data-animate>
+                    <h3>Pro Membership</h3>
+                    <p class="price">$20/month</p>
+                    <ul>
+                        <li>Everything in Basic</li>
+                        <li>Advanced AI insights</li>
+                        <li>1:1 mentorship</li>
+                    </ul>
+                    <a href="signup.html" class="btn-primary">Go Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trainers Section -->
+    <section class="trainers fade-in" data-animate>
+        <div class="container">
+            <h2>Meet Our Expert Trainers</h2>
+            <div class="trainer-grid">
+                <div class="trainer-card zoom-in" data-animate>
+                    <img src="assets/images/trainer1.png" alt="trainer" />
+                    <h3>Chris Dawson</h3>
+                    <p>IELTS Coach, 10+ years exp.</p>
+                </div>
+                <div class="trainer-card zoom-in" data-animate>
+                    <img src="assets/images/trainer2.png" alt="trainer" />
+                    <h3>David White</h3>
+                    <p>AI Language Specialist</p>
+                </div>
+                <div class="trainer-card zoom-in" data-animate>
+                    <img src="assets/images/trainer3.png" alt="trainer" />
+                    <h3>Sophia Patel</h3>
+                    <p>IELTS Academic Mentor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources fade-in" data-animate>
+        <div class="container">
+            <h2>Discover the Best IELTS Resources</h2>
+            <div class="resource-grid">
+                <div class="resource-card slide-in-left" data-animate>
+                    <h3>Speaking Toolkit</h3>
+                    <p>Practice topics and AI-powered speaking feedback.</p>
+                </div>
+                <div class="resource-card slide-in-right" data-animate>
+                    <h3>Writing Mastery</h3>
+                    <p>Essay samples, corrections, and Band 9 strategies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq fade-in" data-animate>
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h4>How does AI help in IELTS prep?</h4>
+                    <p>Our AI evaluates your performance and provides real-time feedback.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I improve my band score quickly?</h4>
+                    <p>Yes, with focused practice and targeted learning paths.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
+        <div class="footer-content container">
             <div>
                 <h3>Determined</h3>
                 <p>Master IELTS with AI-powered insights.</p>
@@ -91,9 +234,9 @@
             <div>
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">AI Tools</a></li>
-                    <li><a href="#">IELTS Modules</a></li>
-                    <li><a href="#">Resources</a></li>
+                    <li><a href="ai.html">AI Tools</a></li>
+                    <li><a href="ielts.html">IELTS Modules</a></li>
+                    <li><a href="resources.html">Resources</a></li>
                 </ul>
             </div>
             <div>
@@ -109,15 +252,15 @@
         </div>
         <div class="footer-bottom">&copy; 2025 Determined. All rights reserved.</div>
     </footer>
-
+    
     <!-- Floating Chat Button -->
     <button class="chat-btn">💬</button>
-
+    
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="assets/js/typing.js"></script>
     <script src="assets/js/scroll-effects.js"></script>
     <script src="assets/js/main.js"></script>
-</body>
-
+    </body>
+    
 </html>
