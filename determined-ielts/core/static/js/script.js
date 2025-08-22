@@ -1,6 +1,8 @@
-/* ========= NAVBAR SHRINK ON SCROLL ========= */
-window.addEventListener("scroll", function () {
-    const navbar = document.querySelector(".navbar");
+// -----------------------------
+// Navbar shrink on scroll
+// -----------------------------
+window.addEventListener("scroll", () => {
+    const navbar = document.getElementById("navbar");
     if (window.scrollY > 50) {
         navbar.classList.add("shrink");
     } else {
@@ -8,80 +10,40 @@ window.addEventListener("scroll", function () {
     }
 });
 
-/* ========= TYPED TEXT EFFECT ========= */
-document.addEventListener("DOMContentLoaded", function () {
-    const typedText = document.querySelector(".hero-typed");
-    const phrases = [
-        "Achieve your dream IELTS score 🚀",
-        "Practice smarter with AI 🤖",
-        "Track your progress with insights 📊",
-        "Be Determined, Be Unstoppable 💪"
-    ];
+// -----------------------------
+// Floating chat toggle
+// -----------------------------
+document.addEventListener("DOMContentLoaded", () => {
+    const chatIcon = document.getElementById("chat-icon");
+    const chatBox = document.getElementById("chat-box");
 
-    let currentPhrase = 0;
-    let currentChar = 0;
-    let isDeleting = false;
-
-    function type() {
-        const phrase = phrases[currentPhrase];
-        if (isDeleting) {
-            typedText.textContent = phrase.substring(0, currentChar--);
-            if (currentChar < 0) {
-                isDeleting = false;
-                currentPhrase = (currentPhrase + 1) % phrases.length;
-            }
-        } else {
-            typedText.textContent = phrase.substring(0, currentChar++);
-            if (currentChar > phrase.length) {
-                isDeleting = true;
-                setTimeout(type, 1200); // pause before deleting
-                return;
-            }
-        }
-        setTimeout(type, isDeleting ? 50 : 100);
+    if (chatIcon && chatBox) {
+        chatIcon.addEventListener("click", () => {
+            chatBox.classList.toggle("active");
+        });
     }
-
-    type();
 });
 
-/* ========= SCROLL REVEAL ========= */
-const revealElements = document.querySelectorAll(".feature-section, .graph-section, .cta-section");
-
-window.addEventListener("scroll", function () {
-    const triggerBottom = window.innerHeight * 0.85;
-
-    revealElements.forEach((el) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < triggerBottom) {
-            el.classList.add("show");
-        }
-    });
-});
-
-/* ========= IELTS PROGRESS GRAPH ========= */
-document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById("progressChart").getContext("2d");
-
-    const progressChart = new Chart(ctx, {
-        type: "radar", // modern & engaging chart type
+// -----------------------------
+// Chart.js for IELTS Progress
+// -----------------------------
+const ctx = document.getElementById("progressChart");
+if (ctx) {
+    new Chart(ctx, {
+        type: "line",
         data: {
-            labels: ["Listening", "Reading", "Writing", "Speaking"],
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
             datasets: [
                 {
-                    label: "Your Current Scores",
-                    data: [6, 6.5, 5.5, 6], // Dummy data for now
-                    backgroundColor: "rgba(75, 192, 192, 0.2)",
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    borderWidth: 2,
-                    pointBackgroundColor: "#4bc0c0"
-                },
-                {
-                    label: "Target Band Score",
-                    data: [8, 8, 7.5, 7.5],
-                    backgroundColor: "rgba(255, 99, 132, 0.2)",
-                    borderColor: "rgba(255, 99, 132, 1)",
-                    borderWidth: 2,
-                    pointBackgroundColor: "#ff6384"
+                    label: "Overall Band Score",
+                    data: [5.5, 6.0, 6.5, 7.0, 7.5],
+                    borderColor: "#c59d7e",
+                    backgroundColor: "rgba(197, 157, 126, 0.2)",
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: "#c59d7e",
+                    pointRadius: 6,
+                    pointHoverRadius: 8
                 }
             ]
         },
@@ -89,24 +51,19 @@ document.addEventListener("DOMContentLoaded", function () {
             responsive: true,
             plugins: {
                 legend: {
-                    position: "top",
-                    labels: { color: "#333", font: { size: 14 } }
-                },
-                title: {
-                    display: true,
-                    text: "IELTS Band Progress Tracker",
-                    font: { size: 18 }
+                    labels: { color: "#333", font: { family: "Poppins" } }
                 }
             },
             scales: {
-                r: {
-                    beginAtZero: true,
-                    max: 9,
-                    ticks: { stepSize: 1, color: "#555" },
-                    grid: { color: "rgba(0,0,0,0.1)" },
-                    angleLines: { color: "rgba(0,0,0,0.1)" }
+                x: {
+                    ticks: { color: "#333", font: { family: "Inter" } },
+                    grid: { color: "rgba(0,0,0,0.05)" }
+                },
+                y: {
+                    ticks: { color: "#333", font: { family: "Inter" } },
+                    grid: { color: "rgba(0,0,0,0.05)" }
                 }
             }
         }
     });
-});
+}

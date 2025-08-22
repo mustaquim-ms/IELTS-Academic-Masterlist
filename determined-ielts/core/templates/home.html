@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-text">
+        <h1><span class="highlight">Determined IELTS</span></h1>
+        <p class="typed-text">Your AI-powered IELTS learning companion 🚀</p>
+    </div>
+</section>
+
+<!-- Progress Tracking Section -->
+<section class="progress-section">
+    <h2>Your IELTS Progress</h2>
+    <canvas id="progressChart"></canvas>
+</section>
+
+<!-- Example Cards -->
+<section class="cards">
+    <div class="card">
+        <h3>Reading</h3>
+        <p>Track your reading comprehension scores.</p>
+    </div>
+    <div class="card">
+        <h3>Writing</h3>
+        <p>Improve essays with AI-powered feedback.</p>
+    </div>
+    <div class="card">
+        <h3>Speaking</h3>
+        <p>Practice with interactive AI chat tools.</p>
+    </div>
+    <div class="card">
+        <h3>Listening</h3>
+        <p>Boost listening skills with practice tests.</p>
+    </div>
+</section>
+{% endblock %}
