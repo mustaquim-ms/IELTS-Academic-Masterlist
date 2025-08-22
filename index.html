@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Determined - AI Powered IELTS</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- AOS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Determined</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">AI Tools</a></li>
+                <li><a href="#">IELTS Modules</a></li>
+                <li><a href="#">Resources</a></li>
+                <li><a href="#">Blogs</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="login.html" class="btn-login">Login</a>
+                <a href="signup.html" class="btn-primary small">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content" data-aos="fade-up">
+            <h1><span id="typing"></span></h1>
+            <p>Achieve your IELTS goals with AI-driven insights and personalized learning.</p>
+            <a href="signup.html" class="btn-primary">Get Started</a>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape circle"></div>
+            <div class="shape blob"></div>
+            <div class="shape circle small"></div>
+        </div>
+        <div class="wave"></div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2 data-aos="fade-up">Why Choose Determined?</h2>
+        <div class="feature-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <div class="icon">🤖</div>
+                <h3>AI Insights</h3>
+                <p>Real-time feedback on your IELTS practice.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="icon">🎯</div>
+                <h3>Targeted Practice</h3>
+                <p>Adaptive learning that improves where it matters most.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon">📚</div>
+                <h3>Rich Resources</h3>
+                <p>Expert guides, blogs, and personalized strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview -->
+    <section class="dashboard">
+        <h2 data-aos="fade-up">Track Your Progress</h2>
+        <canvas id="progressChart"></canvas>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h3>Determined</h3>
+                <p>Master IELTS with AI-powered insights.</p>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">AI Tools</a></li>
+                    <li><a href="#">IELTS Modules</a></li>
+                    <li><a href="#">Resources</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact</h3>
+                <p>Email: info@determined.com</p>
+                <p>Phone: +123 456 789</p>
+            </div>
+            <div>
+                <h3>Subscribe</h3>
+                <input type="email" placeholder="Enter your email" />
+                <button class="btn-primary">Subscribe</button>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 Determined. All rights reserved.</div>
+    </footer>
+
+    <!-- Floating Chat Button -->
+    <button class="chat-btn">💬</button>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="assets/js/typing.js"></script>
+    <script src="assets/js/scroll-effects.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
