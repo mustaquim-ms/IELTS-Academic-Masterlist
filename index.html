@@ -28,54 +28,86 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="container navbar-layout">
-            <!-- Left: Menu -->
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="ai.html">AI Tools</a></li>
-                <li><a href="ielts.html">IELTS Modules</a></li>
-                <li><a href="resources.html">Resources</a></li>
-                <li><a href="blogs.html">Blogs</a></li>
-                <li><a href="contact.html">Contact</a></li>
+        <div class="container nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">Deter<span>mined</span></a>
+    
+            <!-- Hamburger (mobile) -->
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+    
+            <!-- Nav links -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#trainers">Trainers</a></li>
+                <li><a href="#resources">Resources</a></li>
             </ul>
-
-            <!-- Center: Logo -->
-            <a href="index.html" class="logo">
-                <img src="assets/images/logo.png" alt="Determined Logo" height="45" />
-            </a>
-
-            <!-- Right: Actions -->
-            <div class="nav-actions">
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="signup.html" class="btn-primary small">Sign Up</a>
-            </div>
-        </div>
-        <!-- Sticky social icons when scrolling -->
-        <div class="sticky-icons">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
+    
+            <!-- CTA -->
+            <a href="signup.html" class="btn-primary nav-cta">Sign Up</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero fade-in" data-animate>
-        <div class="container hero-content">
+    <!-- ===== Hero / Header Section ===== -->
+    <header class="hero-section">
+        <div class="container hero-layout">
+    
+            <!-- Left content -->
             <div class="hero-text">
-                <h1 class="fade-in" data-animate>
-                    Unlocking the future with <br>
-                    <span id="typed-text"></span>
-                </h1>
-                <p class="fade-in" data-animate>Achieve IELTS success with AI-powered feedback and personalized study
-                    paths tailored to you.</p>
-                <div class="hero-actions">
-                    <a href="signup.html" class="btn-primary">Get Started</a>
-                    <a href="resources.html" class="btn-secondary">Learn More</a>
+                <h1>Your Bright Future Is<br><span>What We Care About</span></h1>
+                <p>
+                    Determined is a premier learning platform dedicated to educating individuals and
+                    professionals to maximize their IELTS score and with our AI feaured learning, you will be unstoppable.
+                </p>
+    
+                <!-- Search bar -->
+                <div class="search-bar">
+                    <input type="text" placeholder="Type a topic: reading, speaking, or anything IELTS related !" />
+                    <button class="btn-search">Search</button>
+                </div>
+    
+                <!-- Stats -->
+                <div class="stats">
+                    <div class="students">
+                        <div class="avatars">
+                            <img src="images/user1.jpg" alt="student" />
+                            <img src="images/user2.jpg" alt="student" />
+                            <img src="images/user3.jpg" alt="student" />
+                            <img src="images/user4.jpg" alt="student" />
+                        </div>
+                        <div class="text">
+                            <h3>127K+</h3>
+                            <p>Students Trained</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="hero-image zoom-in" data-animate>
-                <img src="assets/images/hero-students.png" alt="Students Learning" />
+    
+            <!-- Right images -->
+            <div class="hero-images">
+                <div class="image-card">
+                    <img src="images/student.jpg" alt="Student Learning" />
+                </div>
+                <div class="image-card with-badge">
+                    <img src="images/trainer.jpg" alt="Expert Trainer" />
+                    <div class="badge">
+                        <i class="ai-icon"></i>
+                        <span>80+<br>Expert Trainers</span>
+                    </div>
+                </div>
             </div>
+        </div>
+    
+        <!-- Decorative Waves -->
+        <div class="waves">
+            <img src="images/wave-green.svg" alt="wave" />
+            <img src="images/wave-blue.svg" alt="wave" />
         </div>
     </header>
 
@@ -92,26 +124,54 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features fade-in" data-animate>
+    <!-- ===== Features Section ===== -->
+    <section class="features-section">
         <div class="container">
-            <h2>Why Choose Determined?</h2>
-            <div class="feature-grid">
-                <div class="feature-card slide-in-left" data-animate>
-                    <i class="fa-solid fa-robot"></i>
-                    <h3>AI Insights</h3>
-                    <p>Get real-time feedback on your IELTS practice.</p>
+            <h2 class="section-title">Why Choose <span>Determined</span>?</h2>
+            <div class="features-grid">
+    
+                <!-- Feature Card 1 -->
+                <div class="feature-card" data-expand>
+                    <div class="icon">🤖</div>
+                    <h3>AI-Powered Learning</h3>
+                    <p>Personalized study plans tailored with Artificial Intelligence.</p>
+                    <div class="hidden-text">
+                        <p>
+                            Determined analyzes your performance and adapts lessons in real-time,
+                            ensuring faster progress and higher IELTS scores.
+                        </p>
+                    </div>
+                    <button class="btn-readmore">Read More</button>
                 </div>
-                <div class="feature-card zoom-in" data-animate>
-                    <i class="fa-solid fa-bullseye"></i>
-                    <h3>Targeted Practice</h3>
-                    <p>Adaptive learning focused on your weak spots.</p>
+    
+                <!-- Feature Card 2 -->
+                <div class="feature-card" data-expand>
+                    <div class="icon">📊</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Visual dashboards to monitor your test readiness.</p>
+                    <div class="hidden-text">
+                        <p>
+                            Get detailed analytics on your strengths and weaknesses
+                            with real-time reports and charts.
+                        </p>
+                    </div>
+                    <button class="btn-readmore">Read More</button>
                 </div>
-                <div class="feature-card slide-in-right" data-animate>
-                    <i class="fa-solid fa-book"></i>
-                    <h3>Rich Resources</h3>
-                    <p>Guides, blogs, and personalized strategies.</p>
+    
+                <!-- Feature Card 3 -->
+                <div class="feature-card" data-expand>
+                    <div class="icon">🎯</div>
+                    <h3>IELTS Modules</h3>
+                    <p>Full IELTS exam modules with AI feedback.</p>
+                    <div class="hidden-text">
+                        <p>
+                            Practice Listening, Reading, Writing, and Speaking
+                            with instant AI scoring and recommendations.
+                        </p>
+                    </div>
+                    <button class="btn-readmore">Read More</button>
                 </div>
+    
             </div>
         </div>
     </section>
@@ -206,6 +266,16 @@
             </div>
         </div>
     </section>
+    
+    
+    <!-- Dashboard Section -->
+    <section class="dashboard fade-in" data-animate>
+        <div class="container">
+            <h2>Your Dashboard Progress</h2>
+            <canvas id="progressChart" height="120"></canvas>
+        </div>
+    </section>
+
 
     <!-- FAQ Section -->
     <section class="faq fade-in" data-animate>
@@ -224,34 +294,61 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content container">
-            <div>
-                <h3>Determined</h3>
-                <p>Master IELTS with AI-powered insights.</p>
+    <!-- ===== Footer Section ===== -->
+    <footer class="footer">
+        <div class="container footer-layout">
+    
+            <!-- Brand -->
+            <div class="footer-brand">
+                <div class="logo-circle">D</div>
+                <p>
+                    Determined is an AI-powered IELTS learning platform designed to
+                    help students and professionals achieve their best scores.
+                </p>
             </div>
-            <div>
-                <h3>Quick Links</h3>
+    
+            <!-- Quick Links -->
+            <div class="footer-links">
+                <h4>Quick Links</h4>
                 <ul>
-                    <li><a href="ai.html">AI Tools</a></li>
-                    <li><a href="ielts.html">IELTS Modules</a></li>
-                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">AI Tools</a></li>
+                    <li><a href="#">IELTS Modules</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">Blogs</a></li>
                 </ul>
             </div>
-            <div>
-                <h3>Contact</h3>
-                <p>Email: info@determined.com</p>
-                <p>Phone: +123 456 789</p>
+    
+            <!-- Contact -->
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@determined.ai</p>
+                <p>Phone: +1 234 567 890</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
             </div>
-            <div>
-                <h3>Subscribe</h3>
-                <input type="email" placeholder="Enter your email" />
-                <button class="btn-primary">Subscribe</button>
+    
+            <!-- Newsletter -->
+            <div class="footer-newsletter">
+                <h4>Stay Updated</h4>
+                <form>
+                    <input type="email" placeholder="Enter your email" required />
+                    <button type="submit">Subscribe</button>
+                </form>
             </div>
+    
         </div>
-        <div class="footer-bottom">&copy; 2025 Determined. All rights reserved.</div>
+    
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+            <p>© 2025 Determined. All Rights Reserved.</p>
+        </div>
     </footer>
+
     
     <!-- Floating Chat Button -->
     <button class="chat-btn">💬</button>

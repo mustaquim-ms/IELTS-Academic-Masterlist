@@ -2,30 +2,48 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Determined</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | IELTS AI Academy</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="auth-body">
-    <div class="auth-container">
-        <h2>Welcome Back</h2>
-        <form class="auth-form">
-            <input type="email" placeholder="Email" required />
-            <input type="password" placeholder="Password" required />
-            <button class="btn-primary">Login</button>
-            <a href="#">Forgot Password?</a>
-        </form>
-        <div class="social-login">
-            <p>Or login with</p>
-            <div class="social-buttons">
-                <button class="google">G</button>
-                <button class="facebook">f</button>
+
+    <div class="auth-container fade-in">
+        <div class="auth-card">
+            <h2>Welcome Back 👋</h2>
+            <p class="auth-subtitle">Login to continue your IELTS journey</p>
+
+            <form action="dashboard.html" method="POST" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn-primary full-width">Login</button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <div class="social-login">
+                <button class="btn-social google"><img src="assets/icons/google.svg" alt=""> Continue with
+                    Google</button>
+                <button class="btn-social facebook"><img src="assets/icons/facebook.svg" alt=""> Continue with
+                    Facebook</button>
             </div>
+
+            <p class="auth-alt">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </p>
         </div>
-        <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
     </div>
+
 </body>
 
 </html>

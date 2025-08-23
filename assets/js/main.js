@@ -1,54 +1,37 @@
-// -----------------------------
-// Typing Animation (Typed.js)
-// -----------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    if (document.getElementById("typing")) {
-        new Typed("#typing", {
-            strings: [
-                "AI-Powered IELTS Learning",
-                "Score Higher with Smart Insights",
-                "Personalized IELTS Success"
-            ],
-            typeSpeed: 60,
-            backSpeed: 40,
-            loop: true
-        });
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    // ===============================
+    // Fade-in / Slide-in Animations
+    // ===============================
+    const animatedElements = document.querySelectorAll("[data-animate]");
 
-    // -----------------------------
-    // Chart.js Dashboard Progress
-    // -----------------------------
-    if (document.getElementById("progressChart")) {
-        const ctx = document.getElementById("progressChart").getContext("2d");
-        new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-                datasets: [{
-                    label: "Mock Test Progress",
-                    data: [55, 65, 70, 80],
-                    borderColor: "#006d77",
-                    backgroundColor: "rgba(0, 109, 119, 0.2)",
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: { beginAtZero: true, max: 100 }
+    const observer = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("animate");
+                    observer.unobserve(entry.target); // animate only once
                 }
-            }
-        });
-    }
+            });
+        },
+        { threshold: 0.2 }
+    );
 
-    // -----------------------------
-    // Navbar Scroll Effect
-    // -----------------------------
+    animatedElements.forEach((el) => {
+        observer.observe(el);
+    });
+
+    // Mobile navbar toggle
+    const menuToggle = document.getElementById("menu-toggle");
+    const navLinks = document.getElementById("nav-links");
+
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("open");
+        menuToggle.classList.toggle("active");
+    });
+
+    // Navbar background change on scroll
     const navbar = document.querySelector(".navbar");
+
     window.addEventListener("scroll", () => {
         if (window.scrollY > 50) {
             navbar.classList.add("scrolled");
@@ -57,28 +40,112 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // -----------------------------
-    // AOS Init (Animate on Scroll)
-    // -----------------------------
-    AOS.init({
-        duration: 800,
-        once: true
+
+    // ===============================
+    // Smooth Hover Lift (extra polish)
+    // ===============================
+    const hoverables = document.querySelectorAll(
+        ".btn-primary, .btn-secondary, .feature-card, .course-card, .pricing-card, .trainer-card, .resource-card"
+    );
+
+    hoverables.forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+            el.style.transition = "all 0.3s ease";
+            el.style.transform = "translateY(-4px)";
+            el.style.boxShadow = "0 6px 16px rgba(0, 0, 0, 0.15)";
+        });
+
+        el.addEventListener("mouseleave", () => {
+            el.style.transform = "translateY(0)";
+            el.style.boxShadow = "";
+        });
+    });
+
+    // ===============================
+    // Dashboard Chart (Mock Test Progress)
+    // ===============================
+    const chartCanvas = document.getElementById("progressChart");
+
+    if (chartCanvas) {
+        const ctx = chartCanvas.getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+                datasets: [
+                    {
+                        label: "Mock Test Progress",
+                        data: [55, 62, 70, 78], // sample data, replace with dynamic values
+                        borderColor: "#ff6b6b", // coral accent
+                        backgroundColor: "rgba(255, 107, 107, 0.2)",
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: "#008080", // deep teal
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: "#333",
+                            font: {
+                                family: "Inter, sans-serif",
+                                size: 14,
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: "#555",
+                            font: {
+                                family: "Poppins, sans-serif",
+                            },
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            color: "#555",
+                            font: {
+                                family: "Poppins, sans-serif",
+                            },
+                        },
+                        beginAtZero: true,
+                        max: 100,
+                    },
+                },
+            },
+        });
+    }
+});
+
+// ===== Expand Feature Cards =====
+document.querySelectorAll("[data-expand]").forEach(card => {
+    const btn = card.querySelector(".btn-readmore");
+    btn.addEventListener("click", () => {
+        card.classList.toggle("expanded");
+        btn.textContent = card.classList.contains("expanded") ? "Show Less" : "Read More";
     });
 });
 
-// -----------------------------
-// Reveal on Scroll
-// -----------------------------
-const animatedElements = document.querySelectorAll("[data-animate]");
-const revealOnScroll = () => {
-    const triggerBottom = window.innerHeight * 0.85;
-    animatedElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < triggerBottom) {
-            el.classList.add("visible");
-        }
-    });
-};
+// Ripple effect on buttons
+document.querySelectorAll(".btn-primary, .btn-secondary").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+        let ripple = document.createElement("span");
+        ripple.classList.add("ripple");
+        this.appendChild(ripple);
 
-window.addEventListener("scroll", revealOnScroll);
-window.addEventListener("load", revealOnScroll);
+        let x = e.clientX - e.target.offsetLeft;
+        let y = e.clientY - e.target.offsetTop;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
