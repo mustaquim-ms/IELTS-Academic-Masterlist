@@ -1085,3 +1085,26 @@ section h2 {
     color: #6C63FF;
     font-weight: 600;
 }
+
+/* Remove underline globally */
+a,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+}
+
+/* Also ensure buttons styled as links stay clean */
+button,
+.btn-primary,
+.btn-secondary,
+.btn-readmore {
+    text-decoration: none;
+    outline: none;
+}
+
+/* Paragraphs already don’t have underline by default, 
+   but we reinforce it to be safe */
+p {
+    text-decoration: none;
+}
