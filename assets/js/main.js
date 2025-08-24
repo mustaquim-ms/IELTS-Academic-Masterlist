@@ -149,3 +149,27 @@ document.querySelectorAll(".btn-primary, .btn-secondary").forEach(btn => {
         setTimeout(() => ripple.remove(), 600);
     });
 });
+
+function getAIFeedback() {
+    const input = document.getElementById("aiPrompt").value.trim();
+    const responseEl = document.getElementById("aiResponse");
+
+    if (!input) {
+        responseEl.style.display = "block";
+        responseEl.textContent = "⚠️ Please enter a sentence or response first.";
+        return;
+    }
+
+    // Simulated AI feedback (later can be connected to backend/real API)
+    let feedback = "";
+    if (input.length < 20) {
+        feedback = "Your response is a bit short. Try elaborating with more details.";
+    } else if (input.toLowerCase().includes("i think")) {
+        feedback = "Great start! Consider varying your phrases instead of 'I think' repeatedly.";
+    } else {
+        feedback = "Good attempt! Focus on using advanced vocabulary and avoid repetitive structures.";
+    }
+
+    responseEl.style.display = "block";
+    responseEl.textContent = "🤖 AI Feedback: " + feedback;
+}

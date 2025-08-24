@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Determined - AI Powered IELTS</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/ai.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- AOS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">Deter<span>mined</span></a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ai.html" class="active">AI Tools</a></li>
+                <li><a href="course.html">Courses</a></li>
+                <li><a href="trainers.html">Trainers</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <a href="auth.html" class="btn-primary nav-cta">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="ai-hero">
+        <div id="particles"></div>
+        <div class="container">
+            <h1>Unlock Success with AI-Powered IELTS Tools</h1>
+            <p>Practice smarter, improve faster, and achieve your dream IELTS score with Determined’s AI assistant.</p>
+            <form class="ai-prompt">
+                <input type="text" placeholder="Type a sentence to check your IELTS English..." />
+                <button type="submit">Get Feedback</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Chatbot -->
+    <section class="ai-chat">
+        <div class="container">
+            <h2>Talk to Your AI IELTS Tutor</h2>
+            <div class="chat-box">
+                <div class="messages">
+                    <p class="bot"><strong>Bot:</strong> Hello! Ask me any IELTS speaking question.</p>
+                    <p class="user"><strong>You:</strong> How can I improve my writing?</p>
+                    <p class="bot"><strong>Bot:</strong> Practice structured essays: Intro → 2 body paragraphs →
+                        Conclusion.</p>
+                </div>
+                <input type="text" placeholder="Type your question..." />
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="progress">
+        <div class="container">
+            <h2>Your Progress at a Glance</h2>
+            <p class="progress-sub">Track speaking, writing, listening, and reading improvements over time with AI
+                insights.</p>
+            <canvas id="progressChart"></canvas>
+            <div class="progress-tips">
+                <div class="tip-card"><i class="fas fa-bullseye"></i> Focus more on <b>Speaking</b> – practice daily
+                    mock sessions.</div>
+                <div class="tip-card"><i class="fas fa-pen"></i> Writing scores improve faster when you <b>revise past
+                        essays</b>.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before vs After -->
+    <section class="comparison">
+        <div class="container">
+            <h2>See the Difference: Before vs After AI Feedback</h2>
+            <div class="compare-box">
+                <div class="before">
+                    <h3><i class="fas fa-times-circle"></i> Before</h3>
+                    <p>"I am go school every day."</p>
+                    <p class="feedback">❌ Grammar errors, missing articles, unnatural phrasing.</p>
+                </div>
+                <div class="after">
+                    <h3><i class="fas fa-check-circle"></i> After</h3>
+                    <p>"I go to school every day."</p>
+                    <p class="feedback">✅ Correct grammar, natural expression, IELTS-ready.</p>
+                </div>
+            </div>
+            <div class="insights">
+                <p><i class="fas fa-lightbulb"></i> <b>Insight:</b> AI feedback helps you avoid common IELTS mistakes
+                    quickly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="success-stories">
+        <div class="container">
+            <h2>Student Success Stories</h2>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <img src="assets/images/student1.jpg" alt="student">
+                    <h3>Sara L.</h3>
+                    <p>From Band 5.5 ➝ 7.5 in just 3 months using AI practice daily.</p>
+                </div>
+                <div class="story-card">
+                    <img src="assets/images/student2.jpg" alt="student">
+                    <h3>Ali R.</h3>
+                    <p>Improved writing score by 2 bands after personalized AI corrections.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gamified Badges -->
+    <section class="badges fade-in" data-animate>
+        <div class="container">
+            <h2>🏅 Earn Badges with Every Milestone</h2>
+            <div class="badge-grid">
+                <div class="badge">✍️ Essay Pro</div>
+                <div class="badge">🎤 Fluency Achiever</div>
+                <div class="badge">📚 Vocabulary Master</div>
+                <div class="badge">📈 Grammar Genius</div>
+                <div class="badge">🚀 IELTS Champion</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Popular Tools Stats -->
+    <section class="popular-tools fade-in" data-animate>
+        <div class="container">
+            <h2>🔥 Most Loved AI Tools This Week</h2>
+            <div class="tool-stats">
+                <div class="tool-card">
+                    <i class="fas fa-microphone"></i>
+                    <h3>Speaking AI</h3>
+                    <p>345 students practiced today</p>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-pen"></i>
+                    <h3>Essay Evaluator</h3>
+                    <p>289 essays analyzed</p>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-spell-check"></i>
+                    <h3>Grammar Checker</h3>
+                    <p>421 corrections made</p>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Speaking Partner</h3>
+                    <p>198 live chats completed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Vertical Toolbar -->
+    <div class="quick-toolbar">
+        <a href="#"><i class="fas fa-microphone-alt"></i><span>Speaking</span></a>
+        <a href="#"><i class="fas fa-pen"></i><span>Writing</span></a>
+        <a href="#"><i class="fas fa-book-open"></i><span>Resources</span></a>
+        <a href="#"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-layout">
+            <div class="footer-brand">
+                <div class="logo-circle">D</div>
+                <p>Determined is an AI-powered IELTS learning platform designed to help students and professionals
+                    achieve their best scores.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="ai.html" class="active">AI Tools</a></li>
+                    <li><a href="course.html">Courses</a></li>
+                    <li><a href="trainers.html">Trainers</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@determined.ai</p>
+                <p>Phone: +1 234 567 890</p>
+                <div class="socials">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-newsletter">
+                <h4>Stay Updated</h4>
+                <form>
+                    <input type="email" placeholder="Enter your email" required />
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Determined. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Chat Button -->
+    <button class="chat-btn"><i class="fas fa-comment-alt"></i></button>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Chart.js
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Speaking', 'Writing', 'Reading', 'Listening'],
+                datasets: [{
+                    label: 'Your Progress',
+                    data: [65, 59, 80, 70],
+                    fill: true,
+                    backgroundColor: 'rgba(27, 127, 99, 0.2)',
+                    borderColor: '#1b7f63',
+                    pointBackgroundColor: '#1b7f63'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' } }
+            }
+        });
+    </script>
+</body>
+
+</html>
