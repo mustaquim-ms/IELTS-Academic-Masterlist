@@ -24,14 +24,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const menuToggle = document.getElementById("menu-toggle");
     const navLinks = document.getElementById("nav-links");
 
-    menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("open");
-        menuToggle.classList.toggle("active");
-    });
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("open");
+            menuToggle.classList.toggle("active");
+        });
+    }
 
     // Navbar background change on scroll
     const navbar = document.querySelector(".navbar");
-
     window.addEventListener("scroll", () => {
         if (window.scrollY > 50) {
             navbar.classList.add("scrolled");
@@ -40,12 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-
     // ===============================
     // Smooth Hover Lift (extra polish)
     // ===============================
     const hoverables = document.querySelectorAll(
-        ".btn-primary, .btn-secondary, .feature-card, .course-card, .pricing-card, .trainer-card, .resource-card"
+        ".btn-primary, .btn-secondary, .feature-card, .course-card, .pricing-card, .trainer-card, .resource-card, .tip-card, .story-card, .card"
     );
 
     hoverables.forEach((el) => {
@@ -62,10 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // ===============================
-    // Dashboard Chart (Mock Test Progress)
+    // Dashboard Chart (Line: Mock Test Progress)
     // ===============================
     const chartCanvas = document.getElementById("progressChart");
-
     if (chartCanvas) {
         const ctx = chartCanvas.getContext("2d");
         new Chart(ctx, {
@@ -75,12 +74,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 datasets: [
                     {
                         label: "Mock Test Progress",
-                        data: [55, 62, 70, 78], // sample data, replace with dynamic values
-                        borderColor: "#ff6b6b", // coral accent
+                        data: [55, 62, 70, 78],
+                        borderColor: "#ff6b6b",
                         backgroundColor: "rgba(255, 107, 107, 0.2)",
                         tension: 0.4,
                         fill: true,
-                        pointBackgroundColor: "#008080", // deep teal
+                        pointBackgroundColor: "#008080",
                         pointRadius: 5,
                         pointHoverRadius: 7,
                     },
@@ -104,17 +103,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     x: {
                         ticks: {
                             color: "#555",
-                            font: {
-                                family: "Poppins, sans-serif",
-                            },
+                            font: { family: "Poppins, sans-serif" },
                         },
                     },
                     y: {
                         ticks: {
                             color: "#555",
-                            font: {
-                                family: "Poppins, sans-serif",
-                            },
+                            font: { family: "Poppins, sans-serif" },
                         },
                         beginAtZero: true,
                         max: 100,
@@ -123,11 +118,88 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     }
+
+    // ===============================
+    // Radar Chart (Before vs After Skills)
+    // ===============================
+    const radarCanvas = document.getElementById("skillsRadar");
+    if (radarCanvas) {
+        new Chart(radarCanvas, {
+            type: "radar",
+            data: {
+                labels: ["Speaking", "Writing", "Listening", "Reading"],
+                datasets: [
+                    {
+                        label: "Before",
+                        data: [55, 50, 58, 60],
+                        backgroundColor: "rgba(231,111,81,0.3)",
+                        borderColor: "#e76f51",
+                        pointBackgroundColor: "#e76f51",
+                    },
+                    {
+                        label: "After",
+                        data: [80, 82, 78, 75],
+                        backgroundColor: "rgba(42,157,143,0.3)",
+                        borderColor: "#2a9d8f",
+                        pointBackgroundColor: "#2a9d8f",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: { line: { borderWidth: 2 } },
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 100,
+                        ticks: { stepSize: 20, color: "#555" },
+                        pointLabels: { color: "#333", font: { size: 14 } },
+                        grid: { color: "rgba(0,0,0,0.05)" },
+                        angleLines: { color: "rgba(0,0,0,0.1)" },
+                    },
+                },
+                plugins: {
+                    legend: { labels: { color: "#333" } },
+                },
+            },
+        });
+    }
+
+    // ===============================
+    // Scroll-to-top button
+    // ===============================
+    const scrollBtn = document.createElement("button");
+    scrollBtn.innerHTML = "⬆";
+    scrollBtn.className = "scroll-top-btn";
+    document.body.appendChild(scrollBtn);
+
+    scrollBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("scroll", () => {
+        scrollBtn.style.display = window.scrollY > 300 ? "block" : "none";
+    });
+
+    // ===============================
+    // Dark Mode Toggle
+    // ===============================
+    const themeToggle = document.createElement("button");
+    themeToggle.className = "theme-toggle";
+    themeToggle.textContent = "🌙";
+    document.body.appendChild(themeToggle);
+
+    themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        themeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    });
 });
 
 // ===== Expand Feature Cards =====
-document.querySelectorAll("[data-expand]").forEach(card => {
+document.querySelectorAll("[data-expand]").forEach((card) => {
     const btn = card.querySelector(".btn-readmore");
+    if (!btn) return;
     btn.addEventListener("click", () => {
         card.classList.toggle("expanded");
         btn.textContent = card.classList.contains("expanded") ? "Show Less" : "Read More";
@@ -135,7 +207,7 @@ document.querySelectorAll("[data-expand]").forEach(card => {
 });
 
 // Ripple effect on buttons
-document.querySelectorAll(".btn-primary, .btn-secondary").forEach(btn => {
+document.querySelectorAll(".btn-primary, .btn-secondary").forEach((btn) => {
     btn.addEventListener("click", function (e) {
         let ripple = document.createElement("span");
         ripple.classList.add("ripple");
@@ -160,7 +232,7 @@ function getAIFeedback() {
         return;
     }
 
-    // Simulated AI feedback (later can be connected to backend/real API)
+    // Simulated AI feedback
     let feedback = "";
     if (input.length < 20) {
         feedback = "Your response is a bit short. Try elaborating with more details.";
